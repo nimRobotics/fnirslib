@@ -1,0 +1,14 @@
+*.mat
+*.nirs
+*.csv
+*.png
+*.xlsx
+*.DS_Store
+
+build/
+fnirslib.egg-info/
+
+*.pyc
+*.pyo
+__pycache__/
+
