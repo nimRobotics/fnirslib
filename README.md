@@ -1,4 +1,5 @@
-# fnirslib
+# fnirslib `version 0.1.0-dev` 
+
 Library to process and analyze fnirs data
 
 ## Installation
