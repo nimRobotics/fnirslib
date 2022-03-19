@@ -7,15 +7,13 @@ import numpy as np
 import scipy.io
 import glob
 import os
-import sys
-sys.path.append('../utils')
-from plots import plotData
-from connectivity import functionalConnectivity
+from fnirslib.connectivity import functionalConnectivity
+from fnirslib.plots import plotData
 
 if __name__ == '__main__':
-    basedir = "./procData/" #directory of the data
-    outdir = 'fcPlots/' #directory to save the plots
-    subdirs = [x[0] for x in os.walk(basedir)][1:] #get all the subdirectories
+    in_dir = "./procData/" #directory of the data
+    out_dir = './fcData/' #directory to save the plots
+    subdirs = [x[0] for x in os.walk(in_dir)][1:] #get all the subdirectories
     labels = ['APFC', 'MDPFC', 'LDPFC', 'RDPFC', 'IFC', 'PMC-SMA', 'LBA', 'RBA', 'M1', 'V2-V3', 'V1'] #labels for the regions
     regions = 11 #number of regions
     threshold=0.4
@@ -37,10 +35,10 @@ if __name__ == '__main__':
 
         # save .mat file
         condition = dir.split('/')[-1] #get the condition name
-        save_name = outdir + 'FC_'+condition + '.mat'
+        save_name = out_dir + 'FC_'+condition + '.mat'
         scipy.io.savemat(save_name, {'corr': avgCorr})
 
         # make plots
-        plot = plotData(avgCorr, labels, outdir, colormap='viridis', dpi=300, title='FC: '+condition, filename='FC_'+condition +'.png') 
+        plot = plotData(avgCorr, labels, out_dir, colormap='viridis', dpi=300, title='FC: '+condition, filename='FC_'+condition +'.png') 
         plot.matrixPlot()
         plot.circularPlot()

@@ -60,9 +60,16 @@ class plotData(object):
         plt.close() # close the figure
         plt.cla() # clear the figure
 
-    def brainPlot(self):
+    def connectome(self):
         """
-        Plots the correlation matrix as a brain map
+        Plots brain connectome
+        :return: None
+        """
+        raise NotImplementedError
+
+    def topograph(self):
+        """
+        Plot brain topographic maps
         :return: None
         """
         raise NotImplementedError

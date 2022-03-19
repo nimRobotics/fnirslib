@@ -6,9 +6,8 @@ description: calculates the effective connectivity between regions and plots the
 import numpy as np
 import scipy.io
 import glob
-import sys
-sys.path.append('../utils')
-from plots import plotData
+from fnirslib.connectivity import effectiveConnectivity
+from fnirslib.plots import plotData
 
 dir = "./ecMatlab/" #directory of the data
 outdir = 'ecPlots/' #directory to save the plots
@@ -26,7 +25,6 @@ for file in files:
     print(sig.shape)
     print(cd.shape)
 
-    # based on Rohith's code
     # elementwise multiplication of fval and sig(0/1)
     fval_sig = np.multiply(fval, sig)
     print(fval_sig.shape)

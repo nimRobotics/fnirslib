@@ -7,6 +7,17 @@ import numpy as np
 import scipy.io
 import scipy.signal
 
+def load_data(file):
+    """
+    load data from nirs file
+    :param file: .nirs file
+    :return: data
+    """
+    nirs = scipy.io.loadmat(file) 
+    stimData = np.array(nirs['s'], dtype=np.int64) # stimulus data
+    data = np.array(nirs['procResult']['dc'][0][0], dtype=np.float64) # HbO, HbR, HbT values
+    return stimData, data
+
 def detrend(data):
     """
     Detrends the data
@@ -15,16 +26,20 @@ def detrend(data):
     """
     return scipy.signal.detrend(data, axis=0, type='linear')
 
-def makeRegions(data, regions):
+def makeRegions(data, regions, nRegions=None):
     """
     Returns concatenated data for brain regions
     :param data: HbO, Hbr or HbT data
     :param regions: brain regions
+    :param nRegions: number of brain regions
     :return: data for the brain regions
     """
-    outData = np.zeros((data.shape[0], data.shape[1], regions.shape[0]))
+    if nRegions is None:
+        nRegions = len(regions)
+    assert nRegions == len(regions), 'Number of regions should be equal to the len of regions array'
+
+    outData = np.zeros((data.shape[0], data.shape[1], nRegions))
     for i,region in enumerate(regions):
-        region = region[region!=0]-1 # remove zeros and convert to 0-based indexing
         outData[:,:,i] = np.mean(data[:,:,region], axis=2) # average over the brain regions
     return outData
 
