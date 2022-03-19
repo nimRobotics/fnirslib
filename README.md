@@ -2,6 +2,9 @@
 
 Library to process and analyze fnirs data
 
+author @nimrobotics [![](https://img.shields.io/twitter/follow/nimrobotics.svg?style=social)](https://twitter.com/intent/follow?screen_name=nimrobotics)
+
+
 ## Installation
 
 ```bash
