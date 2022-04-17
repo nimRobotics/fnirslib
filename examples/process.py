@@ -37,7 +37,7 @@ if __name__  == '__main__':
     nRegions = len(regions) # number of brain regions
     nChannels = sum([len(e) for e in regions]) # number of probes
     in_dir = './rawData'
-    out_dir = './procData'
+    out_dir = './procDataAct'
     stimulus=[2,3] # stimulus numbers, 2-normal, 3-attack 
     conditions = ['normal', 'attack'] # condition labels
     files = glob.glob(in_dir+'/*.nirs') # get all the files in the directory
@@ -64,13 +64,13 @@ if __name__  == '__main__':
             assert np.count_nonzero(stimData[:,stim])!= 0, 'No stims found'
 
             print('Identified stims: ', np.count_nonzero(stimData[:,stim]))
-            data = getROI(data,stimData,stim,equalize=True, stimPair=True) # extract the trials
+            data = getROI(data,stimData,stim, equalize=True, stimPair=True, aggMethod='average') # extract the trials
             # data = getROI(data,stimData,stim,equalize=True,stimPair=False,trialTimes=trialTimes, freq=freq) # extract the trials
             if data is None:
                 continue
 
-            data = makeRegions(data, regions) # get data for brain regions
-            data = detrend(data) # detrend the data
+            # data = makeRegions(data, regions) # get data for brain regions
+            # data = detrend(data) # detrend the data
             data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
             Path(out_dir+'/'+condition).mkdir(parents=True, exist_ok=True) # create a directory for the condition
             fname = out_dir+'/'+condition+'/'+file.split('/')[-1].split('.')[0]+'.mat'

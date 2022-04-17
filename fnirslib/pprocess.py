@@ -3,6 +3,7 @@ author: @nimrobotics
 description: process and prepare data for EC and FC analysis
 """
 
+from operator import le
 import numpy as np 
 import scipy.io
 import scipy.signal
@@ -95,14 +96,15 @@ def insertEndStim(stimData, stimNumber, trialTimes, freq):
     stimData[stopIdx,stimNumber] = 1 # set end stims to 1
     return stimData
 
-def getROI(data, stimData, stimNumber, equalize, stimPair, trialTimes=None, freq=None ):
+def getROI(data, stimData, stimNumber, equalize, stimPair, aggMethod='concat', trialTimes=None, freq=None ):
     """
     get ROI data for the stimulus condition
     :param data: HbO, Hbr or HbT data
     :param stimData: stimulus
     :param stimNumber: stimulus number
-    :param equalize: equalize the number of observation for every trial
-    :param stimPair: True if each stim already has start and end, False if only start stim
+    :param equalize: equalize the number of obs in all trials, automatically set True if aggMethod is 'average'
+    :param stimPair: True if each stim already has start and end, False if only start 
+    :param aggMethod: method to aggregate data, either 'concat' or 'average' the trials
     :param trialTimes: array of trial times, cannot be None if stimPair is False
     :param freq: sampling frequency, cannot be None if stimPair is False
     :return: concatenated data for all trials with given stimulus/condition
@@ -113,13 +115,22 @@ def getROI(data, stimData, stimNumber, equalize, stimPair, trialTimes=None, freq
         print('# stims after pairing: ', np.count_nonzero(stimData[:,stimNumber]))
 
     assert np.count_nonzero(stimData[:,stimNumber])%2==0, "Number of stims should be even"
-    
-    if equalize:
+
+    if equalize or aggMethod=='average':
         stimData = equalizeTrialLength(stimData, stimNumber)
 
     # create a mask for the stimulus
     mask = np.cumsum(stimData[:,stimNumber]) % 2   # set values to 1 between two consecutive 1s
-    # islands = find_islands(mask) # number of islands
-    data = data[mask==1]  # apply the mask to the data
+    islands = find_islands(mask) # number of islands
+    print('# of islands: ', islands)
+    if aggMethod=='concat':
+        data = data[mask==1]  # apply the mask to the data
+    if aggMethod=='average':
+        # raise NotImplementedError('average method not implemented yet')
+        idx = np.where(mask!=0)[0]
+        data = np.array(np.split(data[idx],np.where(np.diff(idx)!=1)[0]+1))
+        print('data shape', data.shape)
+        data = np.mean(data, axis=0) # average over the trials
+        print('data shape after average', data.shape)
     print('nobs in ROI',data.shape)
     return data
