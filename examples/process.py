@@ -7,7 +7,7 @@ description:
     - linear detrend data 
     - equalize trial length
 
-CAUTION: 0-based is used by default
+CAUTION: unlike MATLAB 0-based is used by default
 """
 
 import numpy as np 
@@ -15,10 +15,10 @@ import scipy.io
 import scipy.signal
 import glob
 from pathlib import Path
-from fnirslib.pprocess import getROI, makeRegions, detrend, load_data
-# import sys
-# sys.path.append('../fnirslib')
-# from pprocess import getROI, makeRegions, detrend
+# from fnirslib.pprocess import getROI, makeRegions, detrend, load_data
+import sys
+sys.path.append('../fnirslib')
+from pprocess import getROI, makeRegions, detrend, load_data
 
 if __name__  == '__main__':
     # define brain regions, each row is a brain region with elements as channel numbers
@@ -60,8 +60,8 @@ if __name__  == '__main__':
 
             assert np.count_nonzero(stimData[:,stim])%2==0, "Number of stims should be even" # if stims have start and stop
             assert stimData.shape[1]>=stim+1, 'Stimulus column {} not found'.format(stim)
-            assert np.count_nonzero(stimData[:,stim]) <= 20, 'Number of stims should be less than 20'
-            assert np.count_nonzero(stimData[:,stim]) != 0, 'No stims found'
+            assert np.count_nonzero(stimData[:,stim])<= 20, 'Number of stims should be less than 20'
+            assert np.count_nonzero(stimData[:,stim])!= 0, 'No stims found'
 
             print('Identified stims: ', np.count_nonzero(stimData[:,stim]))
             data = getROI(data,stimData,stim,equalize=True, stimPair=True) # extract the trials

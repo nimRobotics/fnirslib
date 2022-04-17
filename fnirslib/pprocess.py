@@ -111,10 +111,9 @@ def getROI(data, stimData, stimNumber, equalize, stimPair, trialTimes=None, freq
         print('# stims before pairing: ', np.count_nonzero(stimData[:,stimNumber]))
         stimData = insertEndStim(stimData, stimNumber, trialTimes, freq)
         print('# stims after pairing: ', np.count_nonzero(stimData[:,stimNumber]))
-    if np.count_nonzero(stimData[:,stimNumber])%2 != 0:
-        print("#################### Warning: ####################")
-        print('Number of stims should be even.')
-        return None
+
+    assert np.count_nonzero(stimData[:,stimNumber])%2==0, "Number of stims should be even"
+    
     if equalize:
         stimData = equalizeTrialLength(stimData, stimNumber)
 
