@@ -3,6 +3,7 @@ author: @nimrobotics
 description: calculates the functional connectivity between regions and plots them
 """
 
+from code import interact
 import numpy as np
 import scipy.io
 import glob
@@ -25,11 +26,11 @@ if __name__ == '__main__':
         files = glob.glob(dir+'/*.mat') # get all the files in the directory
         # avgActivation = np.zeros(np.
         for file in files:
-            print('Processing file: {}, condition: {}'.format(file, dir.split('/')[-1]))
+            print('\nProcessing file: {}, condition: {}'.format(file, dir.split('/')[-1]))
             data = scipy.io.loadmat(file) #load data from the directory
             data = data['pdata'] #get the data from the dictionary
             print(data.shape)
-            data = getPeakActivation(data)
+            data = getPeakActivation(data, interval=4)
             print(data)
             print(data.shape)
 
