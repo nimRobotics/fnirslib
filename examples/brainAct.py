@@ -45,9 +45,10 @@ if __name__ == '__main__':
             print('\nProcessing file: {}, condition: {}'.format(ID, condition))
             data = scipy.io.loadmat(file) #load data from the directory
             data = data['pdata'] #get the data from the dictionary
-            # data = getPeakActivation(data, interval=4)
-            data = getMeanActivation(data)
+            data = getPeakActivation(data, interval=8)
+            # data = getMeanActivation(data)
             print('data shape: ', data.shape)
+            print('data: ', data[0])
             actDF.loc[len(actDF)] = [ID, sex, condition] + list(data)
 
     # save df to csv

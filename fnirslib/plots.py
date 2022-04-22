@@ -55,6 +55,8 @@ class plotData(object):
         plt.xticks(np.arange(0, len(self.labels)), self.labels, rotation=90)
         plt.yticks(np.arange(0, len(self.labels)), self.labels)
         plt.colorbar()
+        # set min and max values
+        plt.clim(0, 1)
         plt.savefig(self.savedir +'matrix_'+self.filename, dpi=self.dpi)
         plt.clf() # clear the figure
         plt.close() # close the figure
