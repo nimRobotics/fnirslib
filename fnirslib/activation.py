@@ -1,11 +1,11 @@
 import numpy as np
 
-def getMeanActivation():
+def getMeanActivation(data):
     """
     Get mean activation for each region
     :return: mean activation for each region
     """
-    raise NotImplementedError
+    return np.mean(data, axis=0)
 
 def getPeakActivation(data, interval):
     """

@@ -15,10 +15,10 @@ import scipy.io
 import scipy.signal
 import glob
 from pathlib import Path
-# from fnirslib.pprocess import getROI, makeRegions, detrend, load_data
-import sys
-sys.path.append('../fnirslib')
-from pprocess import getROI, makeRegions, detrend, load_data
+from fnirslib.pprocess import getROI, makeRegions, detrend, load_data
+# import sys
+# sys.path.append('../fnirslib')
+# from pprocess import getROI, makeRegions, detrend, load_data
 
 if __name__  == '__main__':
     # define brain regions, each row is a brain region with elements as channel numbers
@@ -69,8 +69,8 @@ if __name__  == '__main__':
             if data is None:
                 continue
 
-            # data = makeRegions(data, regions) # get data for brain regions
-            # data = detrend(data) # detrend the data
+            data = makeRegions(data, regions) # get data for brain regions
+            data = detrend(data) # detrend the data
             data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
             Path(out_dir+'/'+condition).mkdir(parents=True, exist_ok=True) # create a directory for the condition
             fname = out_dir+'/'+condition+'/'+file.split('/')[-1].split('.')[0]+'.mat'

@@ -14,7 +14,7 @@ if __name__ == '__main__':
     in_dir = "./procData/" #directory of the data
     out_dir = './fcData/' #directory to save the plots
     subdirs = [x[0] for x in os.walk(in_dir)][1:] #get all the subdirectories
-    labels = ['APFC', 'MDPFC', 'LDPFC', 'RDPFC', 'IFC', 'PMC-SMA', 'LBA', 'RBA', 'M1', 'V2-V3', 'V1'] #labels for the regions
+    labels = ['APFC', 'MDPFC', 'RDPFC', 'LDPFC', 'IFC', 'RBA', 'LBA', 'PMC-SMA', 'M1', 'V2-V3', 'V1']
     regions = 11 #number of regions
     threshold=0.4
     for dir in subdirs:

@@ -14,7 +14,7 @@ import pandas as pd
 import sys
 sys.path.append('../fnirslib')
 from plots import plotData
-from activation import getPeakActivation
+from activation import getPeakActivation, getMeanActivation
 
 if __name__ == '__main__':
     in_dir = "./procDataAct/" #directory of the data
@@ -45,7 +45,9 @@ if __name__ == '__main__':
             print('\nProcessing file: {}, condition: {}'.format(ID, condition))
             data = scipy.io.loadmat(file) #load data from the directory
             data = data['pdata'] #get the data from the dictionary
-            data = getPeakActivation(data, interval=4)
+            # data = getPeakActivation(data, interval=4)
+            data = getMeanActivation(data)
+            print('data shape: ', data.shape)
             actDF.loc[len(actDF)] = [ID, sex, condition] + list(data)
 
     # save df to csv
