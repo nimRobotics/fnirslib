@@ -9,14 +9,13 @@ class Metrics:
     3. functional connectivity
     4. effective connectivity
     """
-    def __init__(self, data, peakPadding=None, verbose=False):
+    def __init__(self, data, peakPadding=None):
         """
         :param data: HbO/Hbr/HbT data for ROI
         :param peakPadding: padding to be considered surrounding the peak
         """
         self.data = data
         self.peakPadding = peakPadding
-        self.verbose = verbose
 
     def getMeanActivation(self):
         """
@@ -32,7 +31,6 @@ class Metrics:
         :param padding: padding to be considered surrounding the peak
         :return: peak activation for each region
         """
-        logging.warning("Hallelujah")
         # initialize array
         peakActivation = np.zeros(self.data.shape[1])
         # iterate over each column of data
@@ -41,17 +39,11 @@ class Metrics:
             # check if padding overshoots the data at start or end
             if maxIdx-self.peakPadding < 0:
                 logging.warning('Peak activation padding overshoots data at start')
-                if self.verbose:
-                    print('Padding overshoots the data at start')
                 peakActivation[i] = np.mean(self.data[0:maxIdx+self.peakPadding,i])
             elif maxIdx+self.peakPadding > self.data.shape[0]:
                 logging.warning('Peak activation padding overshoots data at end')
-                if self.verbose:
-                    print('Padding overshoots the data at end')
                 peakActivation[i] = np.mean(self.data[maxIdx-self.peakPadding:self.data.shape[0],i])
             else:
-                if self.verbose:
-                    print('No padding')
                 peakActivation[i] = np.mean(self.data[maxIdx-self.peakPadding:maxIdx+self.peakPadding,i])
         return peakActivation
 
@@ -73,4 +65,4 @@ class Metrics:
         Get effective connectivity between regions
         :return: correlation matrix
         """
-        raise NotImplementedError
+        assert False, 'Not implemented: effective connectivity'

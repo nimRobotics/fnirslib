@@ -1,5 +1,6 @@
 *.DS_Store
-
+*.mat
+*.nirs
 build/
 fnirslib.egg-info/
 

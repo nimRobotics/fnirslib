@@ -34,11 +34,15 @@ class Fnirslib:
         self.nChannels = sum([len(e) for e in regions]) # number of channels
         self.data = None # fnirs data (nobs, hbo/hbr/hbt, nchannels)
         self.stimData = None # stimulus data
+        logging.info("Processing condition '{}' for file {}".format(self.condition, self.filepath))
         if filepath.endswith('.nirs'):
             self._load_nirs()
         elif filepath.endswith('.snirf'):
             self._load_snirf()
         self._sanity_check()
+        logging.info("Data shape: {}, Stimulus data shape: {}".format(self.data.shape, self.stimData.shape))
+        logging.info("Number of channels: {}, Number of regions: {}".format(self.nChannels, self.nRegions))
+        # logging.info("Sex: ", self.sex)
 
     def _load_nirs(self):
         """
@@ -46,8 +50,6 @@ class Fnirslib:
         :param filepath: .nirs filepath
         :return: data, stimData
         """
-        logging.warning("Log from calss nirs data from {}".format(self.filepath))
-        # assert 1==0, "Not implemented"
         nirs = scipy.io.loadmat(self.filepath) 
         self.stimData = np.array(nirs['s'], dtype=np.int64) # stimulus data
         self.data = np.array(nirs['procResult']['dc'][0][0], dtype=np.float64) # HbO, HbR, HbT values
@@ -68,12 +70,13 @@ class Fnirslib:
         :param stimNumber: stimulus number
         :return: stimData stats
         """
-        print("Number of stims: {}".format(np.count_nonzero(self.stimData[:,self.stimNumber])))
-
+        assert self.stimData.shape[1]>=self.stimNumber+1, 'Stimulus column {} not found'.format(self.stimNumber)
         assert self.stimData.shape[0] == self.data.shape[0], "Number of observations in stimData and data do not match"
         assert self.data.shape[1] == 3, "Number of channels in data is not 3 (HbO, HbR, HbT)"
         assert self.data.shape[2] == self.nChannels, "Number of channels in data does not match number of channels in regions"
-
+        assert np.count_nonzero(self.stimData[:,self.stimNumber])!= 0, 'No stims found'
+        assert not isinstance(self.stimData, np.int64), 'Stimulus data should be int64'
+        logging.info("Number of stims: {}".format(np.count_nonzero(self.stimData[:,self.stimNumber])))
 
         if self.paired:
             assert np.count_nonzero(self.stimData[:,self.stimNumber])%2==0, "Number of stims should be even" # if stims have start and stop
@@ -82,13 +85,9 @@ class Fnirslib:
             end_stim = loc[1::2] # get end indices
             trial_durations = end_stim - start_stim
             mean_duration = np.mean(trial_durations)
-            print("Mean duration: {}".format(mean_duration))
-        else:
-            print("Mean duration: {}".format(np.mean(self.trialTimes)))
-
-        assert self.stimData.shape[1]>=self.stimNumber+1, 'Stimulus column {} not found'.format(self.stimNumber)
-        assert np.count_nonzero(self.stimData[:,self.stimNumber])!= 0, 'No stims found'
-        assert not isinstance(self.stimData, np.int64), 'Stimulus data should be int64'
+        elif not self.paired:
+            mean_duration = np.mean(self.trialTimes)
+        logging.info("Mean trial duration: {}".format(mean_duration))
 
     def _find_islands(self, x):
         """
@@ -132,9 +131,9 @@ class Fnirslib:
         :return: concatenated data for all trials with given stimulus/condition
         """
         if not self.paired:
-            print('# stims before pairing: ', np.count_nonzero(self.stimData[:,self.stimNumber]))
+            # print('# stims before pairing: ', np.count_nonzero(self.stimData[:,self.stimNumber]))
             self._insertEndStim()
-            print('# stims after pairing: ', np.count_nonzero(self.stimData[:,self.stimNumber]))
+            # print('# stims after pairing: ', np.count_nonzero(self.stimData[:,self.stimNumber]))
 
         assert np.count_nonzero(self.stimData[:,self.stimNumber])%2==0, "Number of stims should be even"
 
@@ -144,16 +143,16 @@ class Fnirslib:
         # create a mask for the stimulus
         mask = np.cumsum(self.stimData[:,self.stimNumber]) % 2   # set values to 1 between two consecutive 1s
         islands = self._find_islands(mask) # number of islands
-        print('# of islands: ', islands)
+        # print('# of islands: ', islands)
         if self.aggMethod.lower()=='concat':
             self.data = self.data[mask==1]  # apply the mask to the data
         if self.aggMethod.lower()=='average':
             idx = np.where(mask!=0)[0]
             self.data = np.array(np.split(self.data[idx],np.where(np.diff(idx)!=1)[0]+1))
-            print('data shape', self.data.shape)
+            # print('data shape', self.data.shape)
             self.data = np.mean(self.data, axis=0) # average over the trials
-            print('data shape after average', self.data.shape)
-        print('nobs in ROI',self.data.shape)
+            # print('data shape after average', self.data.shape)
+        logging.info('Number of observations in ROI: {}'.format(self.data.shape[0]))
 
     def makeRegions(self):
         """
@@ -177,35 +176,31 @@ class Fnirslib:
         """
         self.data = self.data/np.max(self.data)
 
-    def peakActivation(self, peakPadding=4, verbose=False):
+    def peakActivation(self, peakPadding=4):
         """
         Finds the peak activation of the data
         :param peakPadding: number of samples to pad the peak
-        :param verbose: print peak activation
         :return: peak activations
         """
-        return Metrics(self.data, peakPadding, verbose=verbose).getPeakActivation()
+        return Metrics(self.data, peakPadding).getPeakActivation()
 
-    def meanActivation(self, verbose=False):
+    def meanActivation(self):
         """
         Finds the mean activation of the data
-        :param verbose: print mean activation
         :return: mean activations 
         """
-        return Metrics(self.data, verbose=verbose).getMeanActivation()
+        return Metrics(self.data).getMeanActivation()
 
-    def functionalConnectivity(self, verbose=False):
+    def functionalConnectivity(self):
         """
         Finds functional connectivity
-        :param verbose: print functional connectivity
         :return: correlation matrix, z-scores
         """
-        return Metrics(self.data, verbose=verbose).getFunctionalConnectivity()
+        return Metrics(self.data).getFunctionalConnectivity()
 
-    def effectiveConnectivity(self, verbose=False):
+    def effectiveConnectivity(self):
         """
         Finds effective connectivity
-        :param verbose: print effective connectivity
         :return:  None
         """
-        return Metrics(self.data, verbose=verbose).getEffectiveConnectivity()
+        return Metrics(self.data).getEffectiveConnectivity()

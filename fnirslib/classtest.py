@@ -34,7 +34,6 @@ assert len(stimulus) == len(conditions), 'Number of stimulus should be equal to 
 for stim, condition in zip(stimulus, conditions):
     for file in files:
         print("\nProcessing condition '{}' for file {}".format(condition,file))
-        logging.info("Processing condition '{}' for file {}".format(condition,file))
 
         try:
             fObj = Fnirslib(file, regions, stim, condition)
@@ -43,9 +42,10 @@ for stim, condition in zip(stimulus, conditions):
             fObj.makeRegions()
             fObj.detrend()
             fObj.data = fObj.data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
-            fObj.peakActivation(peakPadding=5, verbose=False)
+            fObj.peakActivation(peakPadding=4)
             fObj.meanActivation()
             fObj.functionalConnectivity()
+            fObj.effectiveConnectivity()
 
         # except all errors
         except Exception as e:
