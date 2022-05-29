@@ -1,0 +1,24 @@
+2022-05-29 00:31:39,346 - INFO - Processing condition 'normal' for file ./rawData/033.nirs
+2022-05-29 00:31:39,347 - WARNING - Log from calss nirs data from ./rawData/033.nirs
+2022-05-29 00:31:39,525 - WARNING - Hallelujah
+2022-05-29 00:31:39,657 - INFO - Processing condition 'normal' for file ./rawData/013.nirs
+2022-05-29 00:31:39,657 - WARNING - Log from calss nirs data from ./rawData/013.nirs
+2022-05-29 00:31:39,867 - WARNING - Hallelujah
+2022-05-29 00:31:40,016 - INFO - Processing condition 'normal' for file ./rawData/012.nirs
+2022-05-29 00:31:40,016 - WARNING - Log from calss nirs data from ./rawData/012.nirs
+2022-05-29 00:31:40,177 - WARNING - Hallelujah
+2022-05-29 00:31:40,279 - INFO - Processing condition 'normal' for file ./rawData/032.nirs
+2022-05-29 00:31:40,279 - WARNING - Log from calss nirs data from ./rawData/032.nirs
+2022-05-29 00:31:40,530 - WARNING - Hallelujah
+2022-05-29 00:31:40,676 - INFO - Processing condition 'attack' for file ./rawData/033.nirs
+2022-05-29 00:31:40,676 - WARNING - Log from calss nirs data from ./rawData/033.nirs
+2022-05-29 00:31:40,890 - WARNING - Hallelujah
+2022-05-29 00:31:41,066 - INFO - Processing condition 'attack' for file ./rawData/013.nirs
+2022-05-29 00:31:41,066 - WARNING - Log from calss nirs data from ./rawData/013.nirs
+2022-05-29 00:31:41,265 - WARNING - Hallelujah
+2022-05-29 00:31:41,493 - INFO - Processing condition 'attack' for file ./rawData/012.nirs
+2022-05-29 00:31:41,493 - WARNING - Log from calss nirs data from ./rawData/012.nirs
+2022-05-29 00:31:41,638 - WARNING - Hallelujah
+2022-05-29 00:31:41,805 - INFO - Processing condition 'attack' for file ./rawData/032.nirs
+2022-05-29 00:31:41,805 - WARNING - Log from calss nirs data from ./rawData/032.nirs
+2022-05-29 00:31:42,031 - WARNING - Hallelujah
