@@ -17,14 +17,14 @@ class Metrics:
         self.data = data
         self.peakPadding = peakPadding
 
-    def getMeanActivation(self):
+    def get_mean_activation(self):
         """
         Get mean activation for each region
         :return: mean activation for each region
         """
         return np.mean(self.data, axis=0)
 
-    def getPeakActivation(self):
+    def get_peak_activation(self):
         """
         Get peak activation for each region
         :param data: HbO, Hbr or HbT data
@@ -47,7 +47,7 @@ class Metrics:
                 peakActivation[i] = np.mean(self.data[maxIdx-self.peakPadding:maxIdx+self.peakPadding,i])
         return peakActivation
 
-    def getFunctionalConnectivity(self):
+    def get_functional_connectivity(self):
         """
         Get functional connectivity between regions
         :return: correlation matrix, z-scores
@@ -59,7 +59,7 @@ class Metrics:
             corr[i, i] = np.NaN 
         return corr, zscores
 
-    def getEffectiveConnectivity(self):
+    def get_effective_connectivity(self):
         """
         TIP: Use MATLAB MVGC toolbox to calculate the effective connectivity
         Get effective connectivity between regions

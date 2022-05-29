@@ -38,14 +38,14 @@ for stim, condition in zip(stimulus, conditions):
         try:
             fObj = Fnirslib(file, regions, stim, condition)
             print('Data shape: {}, Stim shape: {}'.format(fObj.data.shape, fObj.stimData.shape))
-            fObj.getROI()
-            fObj.makeRegions()
+            fObj.get_ROI()
+            fObj.make_regions()
             fObj.detrend()
             fObj.data = fObj.data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
-            fObj.peakActivation(peakPadding=4)
-            fObj.meanActivation()
-            fObj.functionalConnectivity()
-            fObj.effectiveConnectivity()
+            fObj.peak_activation(peakPadding=4)
+            fObj.mean_activation()
+            fObj.functional_connectivity()
+            fObj.effective_connectivity()
 
         # except all errors
         except Exception as e:
