@@ -1,6 +1,6 @@
 """
 author: @nimrobotics
-description: methods for creating brain connectivity plots
+description: methods for creating fnirs plots
 """
 
 import numpy as np
@@ -37,7 +37,7 @@ class plotData(object):
         :return: None
         """
         fig = plt.figure(num=None, figsize=(8, 8), facecolor='white')
-        mne.viz.plot_connectivity_circle(self.data, self.labels, textcolor='black', colormap='jet', 
+        mne.viz.plot_connectivity_circle(self.data, self.labels, textcolor='black', colormap=self.colormap, 
                                 facecolor='white', vmax=1, vmin=0, linewidth=2.5, node_colors=['gray', 'silver'],                                
                                 title=self.title, fig=fig, show=False) 
         plt.savefig(self.savedir +'circle_'+self.filename, dpi=self.dpi)
@@ -50,7 +50,7 @@ class plotData(object):
         Plots the correlation matrix
         :return: None
         """
-        plt.imshow(self.data, cmap='viridis')
+        plt.imshow(self.data, cmap=self.colormap)
         plt.title(self.title)
         plt.xticks(np.arange(0, len(self.labels)), self.labels, rotation=90)
         plt.yticks(np.arange(0, len(self.labels)), self.labels)
@@ -65,6 +65,13 @@ class plotData(object):
     def connectome(self):
         """
         Plots brain connectome
+        :return: None
+        """
+        raise NotImplementedError
+
+    def connectome_directed(self):
+        """
+        Plots directed brain connectome
         :return: None
         """
         raise NotImplementedError

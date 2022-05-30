@@ -1,9 +1,15 @@
+"""
+author: @nimrobotics
+description: class for processing fnirs data
+"""
+
 import numpy as np
 import pandas as pd
 import scipy.io
 import scipy.signal
-from metrics import Metrics
+from . import metrics
 import logging
+from pathlib import Path
 
 class Fnirslib:
     def __init__(self, filepath, regions, stimNumber, condition, sex='NA', equalize=False, paired=True, aggMethod='concat', trialTimes=None, freq=None):
@@ -154,14 +160,19 @@ class Fnirslib:
             # print('data shape after average', self.data.shape)
         logging.info('Number of observations in ROI: {}'.format(self.data.shape[0]))
 
-    def make_regions(self):
+    def cluster_channels(self):
         """
         Merge channels into regions using mean
         :return: data for the brain regions
         """
-        outData = np.zeros((self.data.shape[0], self.data.shape[1], self.nRegions))
-        for i,region in enumerate(self.regions):
-            outData[:,:,i] = np.mean(self.data[:,:,region], axis=2)
+        if self.data.ndim==2:
+            outData = np.zeros((self.data.shape[0], self.nRegions))
+            for i,region in enumerate(self.regions):
+                outData[:,i] = np.mean(self.data[:,region], axis=1)
+        elif self.data.ndim==3:
+            outData = np.zeros((self.data.shape[0], self.data.shape[1], self.nRegions))
+            for i,region in enumerate(self.regions):
+                outData[:,:,i] = np.mean(self.data[:,:,region], axis=2)
         self.data = outData
 
     def detrend(self):
@@ -182,21 +193,21 @@ class Fnirslib:
         :param peakPadding: number of samples to pad the peak
         :return: peak activations
         """
-        return Metrics(self.data, peakPadding).get_peak_activation()
+        return metrics.Metrics(self.data, peakPadding).get_peak_activation()
 
     def mean_activation(self):
         """
         Finds the mean activation of the data
         :return: mean activations 
         """
-        return Metrics(self.data).get_mean_activation()
+        return metrics.Metrics(self.data).get_mean_activation()
 
     def functional_connectivity(self):
         """
         Finds functional connectivity
         :return: correlation matrix, z-scores
         """
-        return Metrics(self.data).get_functional_connectivity()
+        return metrics.Metrics(self.data).get_functional_connectivity()
 
     def effective_connectivity(self):
         """
@@ -204,3 +215,14 @@ class Fnirslib:
         :return:  None
         """
         return Metrics(self.data).get_effective_connectivity()
+
+    def save_processed_data(self, dir):
+        """
+        Saves processed data to .mat files
+        :param dir: directory to save the data
+        :return: None
+        """
+        Path(dir+'/'+self.condition).mkdir(parents=True, exist_ok=True) # create a directory for the condition
+        fname = dir+'/'+self.condition+'/'+self.filepath.split('/')[-1].split('.')[0]+'.mat'
+        scipy.io.savemat(fname, {"pdata": self.data, "nTrials": np.count_nonzero(self.stimData[:,self.stimNumber])/2})
+        logging.info('Saved data to {}'.format(fname))
