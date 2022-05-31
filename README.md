@@ -7,9 +7,12 @@ author @nimrobotics [![](https://img.shields.io/twitter/follow/nimrobotics.svg?s
 
 ## Installation
 
+
 ```bash
 git clone https://github.com/nimRobotics/fnirslib
 pip install ./fnirslib
+cd fnirslib
+pip install -r requirements.txt
 ```
 
 Uninstall: `pip uninstall fnirslib`
