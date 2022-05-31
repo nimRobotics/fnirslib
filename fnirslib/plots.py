@@ -4,7 +4,7 @@ description: methods for creating fnirs plots
 """
 
 import numpy as np
-import mne
+from mne_connectivity.viz import plot_connectivity_circle
 import matplotlib.pyplot as plt
 
 class plotData(object):
@@ -37,7 +37,7 @@ class plotData(object):
         :return: None
         """
         fig = plt.figure(num=None, figsize=(8, 8), facecolor='white')
-        mne.viz.plot_connectivity_circle(self.data, self.labels, textcolor='black', colormap=self.colormap, 
+        plot_connectivity_circle(self.data, self.labels, textcolor='black', colormap=self.colormap, 
                                 facecolor='white', vmax=1, vmin=0, linewidth=2.5, node_colors=['gray', 'silver'],                                
                                 title=self.title, fig=fig, show=False) 
         plt.savefig(self.savedir +'circle_'+self.filename, dpi=self.dpi)
