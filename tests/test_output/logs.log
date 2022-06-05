@@ -1,0 +1,11 @@
+2022-06-05 16:03:25,771 - INFO - Processing condition 'condition_1' for file test_data.nirs
+2022-06-05 16:03:25,771 - INFO - Number of stims: 20
+2022-06-05 16:03:25,771 - INFO - Mean trial duration: 19.7
+2022-06-05 16:03:25,771 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-05 16:03:25,771 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-05 16:03:25,771 - INFO - Number of observations in ROI: 11
+2022-06-05 16:03:25,772 - INFO - Processing condition 'condition_1' for file test_data.nirs
+2022-06-05 16:03:25,772 - INFO - Number of stims: 20
+2022-06-05 16:03:25,772 - INFO - Mean trial duration: 19.7
+2022-06-05 16:03:25,772 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-05 16:03:25,772 - INFO - Number of channels: 46, Number of regions: 11
