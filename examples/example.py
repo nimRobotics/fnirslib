@@ -50,8 +50,8 @@ assert len(files) > 0, 'No files found in the directory'
 assert len(stimulus) == len(conditions), 'Number of stimulus should be equal to the len of conditions array'
 
 # initialize a pd df
-actDF = pd.DataFrame(columns=['ID', 'sex', 'condition', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C19', 'C20', 'C21', 'C22', 'C23', 'C24', 'C25', 'C26', 'C27', 'C28', 'C29', 'C30', 'C31', 'C32', 'C33', 'C34', 'C35', 'C36', 'C37', 'C38', 'C39', 'C40', 'C41', 'C42', 'C43', 'C44', 'C45', 'C46'])
-# actDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+labels)
+actDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+['C'+str(i) for i in range(sum([len(e) for e in regions]))]) # store data for each channel
+# actDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+labels) # store data for each brain region
 
 avgCorr = np.zeros((len(regions),len(regions)))
 avgZscores = np.zeros((len(regions),len(regions)))
@@ -84,7 +84,6 @@ for stimNumber, condition in zip(stimulus, conditions):
             data = fnirs.detrend(data) # detrend the data
             data = fnirs.cluster_channels(data) # cluster the channels into regions
             data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
-            print('Data shape: {}'.format(data.shape)) 
             # econ = fnirs.effective_connectivity(data)
             corr,zscores = fnirs.functional_connectivity(data.T)
             print('Corr shape: {}, Zscores shape: {}'.format(corr.shape, zscores.shape))
