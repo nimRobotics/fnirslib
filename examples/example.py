@@ -3,7 +3,13 @@ author: @nimrobotics
 description: example of how to use the fnirslib package
 """
 
-from fnirslib.fnirslib import Fnirslib
+# from fnirslib.fnirslib import Fnirslib
+# from fnirslib.plots import plotData
+from pickle import SETITEMS
+import sys
+sys.path.append('../')
+from fnirslib.fnirslib import *
+from fnirslib.metrics import *
 from fnirslib.plots import plotData
 import glob
 import logging
@@ -23,16 +29,16 @@ logging.basicConfig(filename=output_dir+'/logs.log',
                     encoding='utf-8')
 
 regions =  [[0, 1, 3, 4],   # APFC
-            [2, 7, 6, 8, 5],    #MDPFC
+            [2, 5, 6, 7, 8],    #MDPFC
             [14, 15, 16],   #RDPFC
             [10, 11, 12],   #LDPFC
-            [28, 19, 18, 9, 21, 22, 31],    #IFC
+            [9, 18, 19, 21, 22, 28, 31],    #IFC
             [17, 33],   #RBA
             [13, 29],   #LBA
-            [30, 20, 25, 24, 26, 23, 32],   #PMC-SMA
-            [34, 35, 27, 38, 37, 36],   #M1
-            [42, 39, 40, 44],   #V2-V3
-            [43, 41, 45] ]  #V1
+            [20, 23, 24, 25, 26, 30, 32],   #PMC-SMA
+            [27, 34, 35, 36, 37, 38],   #M1
+            [39, 40, 42, 44],   #V2-V3
+            [41, 43, 45] ]  #V1
 threshold = 0.4
 labels = ['APFC', 'MDPFC', 'RDPFC', 'LDPFC', 'IFC', 'RBA', 'LBA', 'PMC-SMA', 'M1', 'V2-V3', 'V1']
 in_dir = './rawData'
@@ -50,34 +56,42 @@ actDF = pd.DataFrame(columns=['ID', 'sex', 'condition', 'C1', 'C2', 'C3', 'C4', 
 avgCorr = np.zeros((len(regions),len(regions)))
 avgZscores = np.zeros((len(regions),len(regions)))
 # loop through all the files and conditions
-for stim, condition in zip(stimulus, conditions):
+for stimNumber, condition in zip(stimulus, conditions):
     for file in files:
         print("\nProcessing condition '{}' for file {}".format(condition,file))
 
         try:
-            fObj = Fnirslib(file, regions, stim, condition)
-            print('Data shape: {}, Stim shape: {}'.format(fObj.data.shape, fObj.stimData.shape))
-            fObj.get_ROI()
-            fObj.detrend()
-            fObj.data = fObj.data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
-            peak = fObj.peak_activation(peakPadding=4)
-            fObj.mean_activation()
+            # perform activation analysis on mean aggregated data
+            fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
+            logging.info("Activation analysis! averaging trial data")
+            data, stims = fnirs.load_nirs() # load the data
+            fnirs.sanity_check(data, stims) # check the data
+            data, stims = fnirs.get_ROI(data, stims, aggMethod='mean')
+            # data = fnirs.detrend(data) # detrend the data
+            # data = fnirs.cluster_channels(data) # cluster the channels into regions
+            data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
+            peak = fnirs.peak_activation(data, peakPadding=5) # get the peak activation
+            mean = fnirs.mean_activation(data) # get the mean activation
+            actDF.loc[len(actDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
+            fnirs.save_processed_data(data, stims, output_dir+'/processed_act')
 
-            print('Data shape: {}'.format(fObj.data.shape))
-            
-            fObj.cluster_channels()
-            # fObj.effective_connectivity()
-            fObj.data = fObj.data.T #transpose the data, rows are regions, columns are observations
-            corr,zscores = fObj.functional_connectivity()
+            # perform connectivity analysis on concatenated data
+            fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
+            logging.info("Connectivity analysis! concatenating trial data")
+            data, stims = fnirs.load_nirs() # load the data
+            fnirs.sanity_check(data, stims) # check the data
+            data, stims = fnirs.get_ROI(data, stims, aggMethod='concat', equalize=False) # get the ROI data
+            data = fnirs.detrend(data) # detrend the data
+            data = fnirs.cluster_channels(data) # cluster the channels into regions
+            data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
+            print('Data shape: {}'.format(data.shape)) 
+            # econ = fnirs.effective_connectivity(data)
+            corr,zscores = fnirs.functional_connectivity(data.T)
             print('Corr shape: {}, Zscores shape: {}'.format(corr.shape, zscores.shape))
             avgCorr = np.mean( np.array([ avgCorr, corr ]), axis=0 ) # average over files/participants
             avgZscores = np.mean( np.array([ avgZscores, zscores ]), axis=0 ) # average over files/participants
+            fnirs.save_processed_data(data, stims, output_dir+'/processed_con')
 
-            fObj.save_processed_data(output_dir+'/processed')
-
-            # save the activation data
-            actDF.loc[len(actDF)] = [fObj.filepath.split('/')[-1].split('.')[0], fObj.sex, fObj.condition] + list(peak)
-        
         except Exception as e:
             print(e)
             logging.error(e)

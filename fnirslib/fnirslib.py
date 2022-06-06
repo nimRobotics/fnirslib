@@ -12,87 +12,78 @@ import logging
 from pathlib import Path
 
 class Fnirslib:
-    def __init__(self, filepath, regions, stimNumber, condition, sex='NA', equalize=False, paired=True, aggMethod='concat', trialTimes=None, freq=None):
+    def __init__(self, filepath, regions, stimNumber, condition, sex='NA', paired=True):
         """
         Initialize the class
-        :param filepath: .nirs file, type: str
+        :param filepath: .nirs or .snirf filepath
         :param regions: brain regions, type: list of lists
         :param stimNumber: stimulus number/condition, type: int
         :param condition: condition, type: str
         :param sex: sex of the participant, M or F, type: str
-        :param equalize: equalize the number of obs in all trials, automatically set True if aggMethod is 'average', type: bool
         :param paired: True if each trial has start and end stim, type: bool
-        :param aggMethod: method to aggregate data, either 'concat' or 'average' the trials, type: str
-        :param trialTimes: array of trial times, cannot be None if stimPair is False, type: list
-        :param freq: frequency of the data, type: float
         """
         self.filepath = filepath
         self.regions = regions
         self.stimNumber = stimNumber
         self.condition = condition
         self.sex = sex
-        self.equalize = equalize
         self.paired = paired
-        self.aggMethod = aggMethod
-        self.trialTimes = trialTimes
-        self.freq = freq
         self.nRegions = len(regions) # number of brain regions
         self.nChannels = sum([len(e) for e in regions]) # number of channels
-        self.data = None # fnirs data (nobs, hbo/hbr/hbt, nchannels)
-        self.stimData = None # stimulus data
-        logging.info("Processing condition '{}' for file {}".format(self.condition, self.filepath))
-        if filepath.endswith('.nirs'):
-            self._load_nirs()
-        elif filepath.endswith('.snirf'):
-            self._load_snirf()
-        self._sanity_check()
-        logging.info("Data shape: {}, Stimulus data shape: {}".format(self.data.shape, self.stimData.shape))
+        logging.info("Processing file '{}', with condition '{}' ...".format(self.filepath,self.condition))        
         logging.info("Number of channels: {}, Number of regions: {}".format(self.nChannels, self.nRegions))
-        # logging.info("Sex: ", self.sex)
 
-    def _load_nirs(self):
+    def load_nirs(self):
         """
         Load nirs data from filepath
-        :param filepath: .nirs filepath
-        :return: data, stimData
+        :return: data, stims
         """
         nirs = scipy.io.loadmat(self.filepath) 
-        self.stimData = np.array(nirs['s'], dtype=np.int64) # stimulus data
-        self.data = np.array(nirs['procResult']['dc'][0][0], dtype=np.float64) # HbO, HbR, HbT values
+        stims = np.array(nirs['s'], dtype=np.int64) # stimulus data
+        data = np.array(nirs['procResult']['dc'][0][0], dtype=np.float64) # HbO, HbR, HbT values
+        logging.info("Successfully loaded data from {}".format(self.filepath))
+        logging.info("Data shape: {}, Stimulus data shape: {}".format(data.shape, stims.shape))
+        return data, stims
 
-    def _load_snirf(self):
+    def load_snirf(self):
         """
         Loads snirf file
-        :return: data, stimData
+        :return: data, stims
         """
         raise NotImplementedError
-        self.stimData = None
-        self.data = None
+        stims = None
+        data = None
+        logging.info("Successfully loaded data from {}".format(self.filepath))
+        logging.info("Data shape: {}, Stimulus data shape: {}".format(data.shape, stims.shape))
+        return data, stims
 
-    def _sanity_check(self):
+    def sanity_check(self, data, stims):
         """
-        check if stimData has stimNumber
-        :param stimData: stimulus data
-        :param stimNumber: stimulus number
-        :return: stimData stats
+        :param stims: stimulus data
+        :param data: data
+        :return: None
         """
-        assert self.stimData.shape[1]>=self.stimNumber+1, 'Stimulus column {} not found'.format(self.stimNumber)
-        assert self.stimData.shape[0] == self.data.shape[0], "Number of observations in stimData and data do not match"
-        assert self.data.shape[1] == 3, "Number of channels in data is not 3 (HbO, HbR, HbT)"
-        assert self.data.shape[2] == self.nChannels, "Number of channels in data does not match number of channels in regions"
-        assert np.count_nonzero(self.stimData[:,self.stimNumber])!= 0, 'No stims found'
-        assert not isinstance(self.stimData, np.int64), 'Stimulus data should be int64'
-        logging.info("Number of stims: {}".format(np.count_nonzero(self.stimData[:,self.stimNumber])))
+        assert stims.shape[1]>=self.stimNumber+1, 'Stimulus column {} not found'.format(self.stimNumber)
+        assert stims.shape[0] == data.shape[0], "Number of observations in stimData and data do not match"
+        assert data.shape[1] == 3, "Number of channels in data is not 3 (HbO, HbR, HbT)"
+        assert data.shape[2] == self.nChannels, "Number of channels in data does not match number of channels in regions"
+        assert np.count_nonzero(stims[:,self.stimNumber])!= 0, 'No stims found'
+        assert not isinstance(stims, np.int64), 'Stimulus data should be int64'
+        logging.info("Number of stims: {}".format(np.count_nonzero(stims[:,self.stimNumber])))
 
         if self.paired:
-            assert np.count_nonzero(self.stimData[:,self.stimNumber])%2==0, "Number of stims should be even" # if stims have start and stop
-            loc = np.where(self.stimData[:,self.stimNumber]==1)[0]
+            assert np.count_nonzero(stims[:,self.stimNumber])%2==0, "Number of stims should be even" # if stims have start and stop
+            loc = np.where(stims[:,self.stimNumber]==1)[0]
             start_stim = loc[::2] # get start indices
             end_stim = loc[1::2] # get end indices
             trial_durations = end_stim - start_stim
             mean_duration = np.mean(trial_durations)
+            logging.info("Trial starts: {}".format(start_stim))
+            logging.info("Trial ends: {}".format(end_stim))
         elif not self.paired:
             mean_duration = np.mean(self.trialTimes)
+            logging.info("Trial starts: {}".format(np.where(stims[:,self.stimNumber]==1)[0]))
+            logging.info("Trial durations: {}".format(self.trialTimes))
         logging.info("Mean trial duration: {}".format(mean_duration))
 
     def _find_islands(self, x):
@@ -103,126 +94,148 @@ class Fnirslib:
         """
         return np.sum(x[1:] & ~x[:-1]) + x[0]
 
-    def _insert_end_stim(self):
+    def _insert_end_stim(self, stims):
         '''
         insert end stims to the trials
+        :param stims: stimulus data
+        :return: stims with end stims
         '''
-        startIdx = np.nonzero(self.stimData[:,self.stimNumber])[0]  # get index of start stim
+        startIdx = np.nonzero(stims[:,self.stimNumber])[0]  # get index of start stim
         stopIdx = startIdx + np.array(self.trialTimes*self.freq, dtype=np.int64)[:startIdx.shape[0]]
 
         # if last idx is greater than the length of the data, set it equal to length of data
-        if stopIdx[-1]>self.stimData.shape[0]:
-            stopIdx[-1] = self.stimData.shape[0]-1
+        if stopIdx[-1]>stims.shape[0]:
+            stopIdx[-1] = stims.shape[0]-1
 
         # construct new stimData, removing extra trials
-        self.stimData[:,self.stimNumber] = 0 # set all stims to 0
-        self.stimData[startIdx,self.stimNumber] = 1 # set start stims to 1
-        self.stimData[stopIdx,self.stimNumber] = 1 # set end stims to 1
+        stims[:,self.stimNumber] = 0 # set all stims to 0
+        stims[startIdx,self.stimNumber] = 1 # set start stims to 1
+        stims[stopIdx,self.stimNumber] = 1 # set end stims to 1
+        return stims
 
-    def _equalize_trial_length(self):
+    def _equalize_trial_length(self, stims):
         '''
         make number of observations equal across trials, by setting them equal
         to min number of observations
         '''
-        loc = np.where(self.stimData[:,self.stimNumber]==1)[0]
+        loc = np.where(stims[:,self.stimNumber]==1)[0]
         start = loc[::2] # get start indices
         end = loc[1::2] # get end indices
-        self.stimData[:,self.stimNumber] = 0 # set all stims to 0
-        self.stimData[start,self.stimNumber] = 1 # set start stims to 1
-        self.stimData[start+np.min(end-start),self.stimNumber] = 1 # set end stims to 1
+        stims[:,self.stimNumber] = 0 # set all stims to 0
+        stims[start,self.stimNumber] = 1 # set start stims to 1
+        stims[start+np.min(end-start),self.stimNumber] = 1 # set end stims to 1
+        return stims
 
-    def get_ROI(self):
+    def get_ROI(self, data, stims,  equalize=False,  aggMethod='concat', trialTimes=None, freq=None):
         """
         get ROI data for the stimulus condition
-        :return: concatenated data for all trials with given stimulus/condition
+        :param data: data
+        :param stims: stimulus data
+        :param equalize: equalize the number of obs in all trials, automatically set True if aggMethod is 'mean', type: bool
+        :param aggMethod: method to aggregate data, either 'concat' or 'mean' the trials, type: str
+        :param trialTimes: array of trial durations, cannot be None if stimPair is False, type: list
+        :param freq: frequency of the data, type: float
+        :return: ROI data, concatenated data for all trials with given stimulus/condition
         """
         if not self.paired:
-            # print('# stims before pairing: ', np.count_nonzero(self.stimData[:,self.stimNumber]))
-            self._insert_end_stim()
-            # print('# stims after pairing: ', np.count_nonzero(self.stimData[:,self.stimNumber]))
+            # print('# stims before pairing: ', np.count_nonzero(stims[:,self.stimNumber]))
+            stims = self._insert_end_stim(stims)
+            # print('# stims after pairing: ', np.count_nonzero(stims[:,self.stimNumber]))
 
-        assert np.count_nonzero(self.stimData[:,self.stimNumber])%2==0, "Number of stims should be even"
+        assert np.count_nonzero(stims[:,self.stimNumber])%2==0, "Number of stims should be even"
 
-        if self.equalize or self.aggMethod.lower()=='average':
-            self._equalize_trial_length()
+        if equalize or aggMethod.lower()=='mean':
+            stims = self._equalize_trial_length(stims)
 
         # create a mask for the stimulus
-        mask = np.cumsum(self.stimData[:,self.stimNumber]) % 2   # set values to 1 between two consecutive 1s
+        mask = np.cumsum(stims[:,self.stimNumber]) % 2   # set values to 1 between two consecutive 1s
         islands = self._find_islands(mask) # number of islands
         # print('# of islands: ', islands)
-        if self.aggMethod.lower()=='concat':
-            self.data = self.data[mask==1]  # apply the mask to the data
-        if self.aggMethod.lower()=='average':
+        if aggMethod.lower()=='concat':
+            data = data[mask==1]  # apply the mask to the data
+        if aggMethod.lower()=='mean':
             idx = np.where(mask!=0)[0]
-            self.data = np.array(np.split(self.data[idx],np.where(np.diff(idx)!=1)[0]+1))
-            # print('data shape', self.data.shape)
-            self.data = np.mean(self.data, axis=0) # average over the trials
-            # print('data shape after average', self.data.shape)
-        logging.info('Number of observations in ROI: {}'.format(self.data.shape[0]))
+            data = np.array(np.split(data[idx],np.where(np.diff(idx)!=1)[0]+1))
+            data = np.mean(data, axis=0) # mean over the trials
+            # print('data shape after mean', data.shape)
+        logging.info('Number of observations in ROI: {}'.format(data.shape[0]))
+        return data, stims
 
-    def cluster_channels(self):
+    def cluster_channels(self, data):
         """
         Merge channels into regions using mean
-        :return: data for the brain regions
+        :param data: data
+        :return: clustered data for the brain regions
         """
-        if self.data.ndim==2:
-            outData = np.zeros((self.data.shape[0], self.nRegions))
+        if data.ndim==2:
+            outData = np.zeros((data.shape[0], self.nRegions))
             for i,region in enumerate(self.regions):
-                outData[:,i] = np.mean(self.data[:,region], axis=1)
-        elif self.data.ndim==3:
-            outData = np.zeros((self.data.shape[0], self.data.shape[1], self.nRegions))
+                outData[:,i] = np.mean(data[:,region], axis=1)
+        elif data.ndim==3:
+            outData = np.zeros((data.shape[0], data.shape[1], self.nRegions))
             for i,region in enumerate(self.regions):
-                outData[:,:,i] = np.mean(self.data[:,:,region], axis=2)
-        self.data = outData
+                outData[:,:,i] = np.mean(data[:,:,region], axis=2)
+        data = outData
+        return data
 
-    def detrend(self):
+    def detrend(self, data):
         """
         Detrends the data
+        :param data: data
+        :return: detrended data
         """
-        self.data = scipy.signal.detrend(self.data, axis=0, type='linear')
+        return scipy.signal.detrend(data, axis=0, type='linear')
 
-    def normalize(self):
+    def normalize(self, data):
         """
         Normalizes the data
+        :param data: data
+        :return: normalized data
         """
-        self.data = self.data/np.max(self.data)
+        return data/np.max(data)
 
-    def peak_activation(self, peakPadding=4):
+    def peak_activation(self, data, peakPadding=4):
         """
         Finds the peak activation of the data
+        :param data: data
         :param peakPadding: number of samples to pad the peak
         :return: peak activations
         """
-        return metrics.Metrics(self.data, peakPadding).get_peak_activation()
+        return metrics.Metrics(data, peakPadding).get_peak_activation()
 
-    def mean_activation(self):
+    def mean_activation(self, data):
         """
         Finds the mean activation of the data
+        :param data: data
         :return: mean activations 
         """
-        return metrics.Metrics(self.data).get_mean_activation()
+        return metrics.Metrics(data).get_mean_activation()
 
-    def functional_connectivity(self):
+    def functional_connectivity(self, data):
         """
         Finds functional connectivity
+        :param data: data
         :return: correlation matrix, z-scores
         """
-        return metrics.Metrics(self.data).get_functional_connectivity()
+        return metrics.Metrics(data).get_functional_connectivity()
 
-    def effective_connectivity(self):
+    def effective_connectivity(self, data):
         """
         Finds effective connectivity
+        :param data: data
         :return:  None
         """
-        return Metrics(self.data).get_effective_connectivity()
+        return metrics.Metrics(data).get_effective_connectivity()
 
-    def save_processed_data(self, dir):
+    def save_processed_data(self, data, stims, dir):
         """
         Saves processed data to .mat files
+        :param data: data
+        :param stims: stimulus data
         :param dir: directory to save the data
         :return: None
         """
         Path(dir+'/'+self.condition).mkdir(parents=True, exist_ok=True) # create a directory for the condition
         fname = dir+'/'+self.condition+'/'+self.filepath.split('/')[-1].split('.')[0]+'.mat'
-        scipy.io.savemat(fname, {"pdata": self.data, "nTrials": np.count_nonzero(self.stimData[:,self.stimNumber])/2})
+        scipy.io.savemat(fname, {"pdata": data, "nTrials": np.count_nonzero(stims[:,self.stimNumber])/2})
         logging.info('Saved data to {}'.format(fname))
