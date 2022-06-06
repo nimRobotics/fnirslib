@@ -1,25 +1,29 @@
-2022-06-06 12:21:57,674 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
-2022-06-06 12:21:57,674 - INFO - Number of channels: 46, Number of regions: 11
-2022-06-06 12:21:57,677 - INFO - Successfully loaded data from test_data.nirs
-2022-06-06 12:21:57,677 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
-2022-06-06 12:21:57,677 - INFO - Number of observations in ROI: 197
-2022-06-06 12:21:57,677 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
-2022-06-06 12:21:57,677 - INFO - Number of channels: 46, Number of regions: 11
-2022-06-06 12:21:57,678 - INFO - Successfully loaded data from test_data.nirs
-2022-06-06 12:21:57,678 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
-2022-06-06 12:21:57,678 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
-2022-06-06 12:21:57,678 - INFO - Number of channels: 46, Number of regions: 11
-2022-06-06 12:21:57,678 - INFO - Successfully loaded data from test_data.nirs
-2022-06-06 12:21:57,678 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
-2022-06-06 12:21:57,678 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
-2022-06-06 12:21:57,678 - INFO - Number of channels: 46, Number of regions: 11
-2022-06-06 12:21:57,678 - INFO - Successfully loaded data from test_data.nirs
-2022-06-06 12:21:57,678 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
-2022-06-06 12:21:57,678 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
-2022-06-06 12:21:57,678 - INFO - Number of channels: 46, Number of regions: 11
-2022-06-06 12:21:57,678 - INFO - Successfully loaded data from test_data.nirs
-2022-06-06 12:21:57,678 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
-2022-06-06 12:21:57,679 - WARNING - Peak activation padding overshoots data at start
-2022-06-06 12:21:57,679 - WARNING - Peak activation padding overshoots data at start
-2022-06-06 12:21:57,679 - WARNING - Peak activation padding overshoots data at start
-2022-06-06 12:21:57,679 - WARNING - Peak activation padding overshoots data at start
+2022-06-06 12:35:20,143 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
+2022-06-06 12:35:20,143 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:35:20,143 - INFO - Successfully loaded data from test_data.nirs
+2022-06-06 12:35:20,143 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-06 12:35:20,144 - INFO - Number of observations in ROI: 197
+2022-06-06 12:35:20,144 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
+2022-06-06 12:35:20,144 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:35:20,144 - INFO - Successfully loaded data from test_data.nirs
+2022-06-06 12:35:20,144 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-06 12:35:20,144 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
+2022-06-06 12:35:20,144 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:35:20,144 - INFO - Successfully loaded data from test_data.nirs
+2022-06-06 12:35:20,144 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-06 12:35:20,144 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
+2022-06-06 12:35:20,144 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:35:20,145 - INFO - Successfully loaded data from test_data.nirs
+2022-06-06 12:35:20,145 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-06 12:35:20,145 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
+2022-06-06 12:35:20,145 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:35:20,145 - INFO - Successfully loaded data from test_data.nirs
+2022-06-06 12:35:20,145 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-06 12:35:20,145 - WARNING - Peak activation padding overshoots data at end
+2022-06-06 12:35:20,145 - WARNING - Peak activation padding overshoots data at start
+2022-06-06 12:35:20,145 - WARNING - Peak activation padding overshoots data at end
+2022-06-06 12:35:20,145 - WARNING - Peak activation padding overshoots data at start
+2022-06-06 12:35:20,146 - WARNING - Peak activation padding overshoots data at end
+2022-06-06 12:35:20,146 - WARNING - Peak activation padding overshoots data at start
+2022-06-06 12:35:20,146 - WARNING - Peak activation padding overshoots data at end
+2022-06-06 12:35:20,146 - WARNING - Peak activation padding overshoots data at start

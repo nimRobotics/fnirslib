@@ -44,12 +44,13 @@ class Metrics:
             # check if padding overshoots the data at start or end
             if maxIdx-self.peakPadding < 0:
                 logging.warning('Peak activation padding overshoots data at start')
-                peakActivation[i] = np.mean(self.data[0:maxIdx+self.peakPadding,i])
-            elif maxIdx+self.peakPadding > self.data.shape[0]:
+                peakActivation[i] = np.mean(self.data[0:maxIdx+self.peakPadding+1,i])
+            elif maxIdx+self.peakPadding+1 > self.data.shape[0]:
                 logging.warning('Peak activation padding overshoots data at end')
                 peakActivation[i] = np.mean(self.data[maxIdx-self.peakPadding:self.data.shape[0],i])
             else:
-                peakActivation[i] = np.mean(self.data[maxIdx-self.peakPadding:maxIdx+self.peakPadding,i])
+                # print(self.data[maxIdx-self.peakPadding:maxIdx+self.peakPadding+1,i])
+                peakActivation[i] = np.mean(self.data[maxIdx-self.peakPadding:maxIdx+self.peakPadding+1,i])
         return peakActivation
 
     def get_functional_connectivity(self):
