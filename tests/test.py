@@ -43,9 +43,9 @@ def generate_data(num_trials, num_channels, num_conditions=2, num_samples=1000, 
     for start, stop in zip(starts, stops):
         data[start:stop, :] = 1
         data[int(np.mean([start, stop])),:, :] = peak_value
-        print('### i:', i)
-        i=i+1
-        print(data[start:stop,0,0])
+        # print('### i:', i)
+        # i=i+1
+        # print(data[start:stop,0,0])
 
 
     return data, stim, starts, stops
@@ -56,72 +56,88 @@ class TestFnirslib(unittest.TestCase):
         self.data, self.stim, self.starts, self.stops = generate_data(10, 46, 2, 1000, 5)
         self.filename  = 'test_data.nirs'
         self.regions = regions =  [[0, 1, 3, 4],   # APFC
-            [2, 7, 6, 8, 5],    #MDPFC
+            [2, 5, 6, 7, 8],    #MDPFC
             [14, 15, 16],   #RDPFC
             [10, 11, 12],   #LDPFC
-            [28, 19, 18, 9, 21, 22, 31],    #IFC
+            [9, 18, 19, 21, 22, 28, 31],    #IFC
             [17, 33],   #RBA
             [13, 29],   #LBA
-            [30, 20, 25, 24, 26, 23, 32],   #PMC-SMA
-            [34, 35, 27, 38, 37, 36],   #M1
-            [42, 39, 40, 44],   #V2-V3
-            [43, 41, 45] ]  #V1
+            [20, 23, 24, 25, 26, 30, 32],   #PMC-SMA
+            [27, 34, 35, 36, 37, 38],   #M1
+            [39, 40, 42, 44],   #V2-V3
+            [41, 43, 45] ]  #V1
         scipy.io.savemat(self.filename, {'s':self.stim, 'procResult':{'dc':self.data}})        
         # print(self.data.shape)
         # print(self.stim.shape)
 
     def test_load_data(self):
         fnirs = Fnirslib(self.filename, self.regions, 0, 'condition_1')
-        self.assertEqual(fnirs.stimData.shape, self.stim.shape)
-        self.assertEqual(fnirs.data.shape, self.data.shape)
+        data, stims = fnirs.load_nirs() # load the data
+        self.assertEqual(stims.shape, self.stim.shape)
+        self.assertEqual(data.shape, self.data.shape)
         print('test_load_data passed')
 
     def test_get_ROI_paired(self):
-        fnirs = Fnirslib(self.filename, self.regions, 0, 'condition_1', aggMethod='average', equalize=True)
-        fnirs.get_ROI()
-        print("data",fnirs.data[:,0,0])
-        self.assertEqual(fnirs.data.shape, (np.sum(self.stops[:10]-self.starts[:10]), 3, 46))
-        # fnirs.detrend()
-        fnirs.data = fnirs.data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
-        print(fnirs.data.shape)
-        print(fnirs.data[0])
-        peak = fnirs.peak_activation(peakPadding=0)
-        self.assertEqual(peak.shape, (46,))
-        print(peak)
-
+        fnirs = Fnirslib(self.filename, self.regions, 0, 'condition_1')
+        data, stims = fnirs.load_nirs() # load the data
+        data, stims = fnirs.get_ROI(data, stims, aggMethod='concat')
+        self.assertEqual(data.shape, (np.sum(self.stops[:10]-self.starts[:10]), 3, 46))
         print('test_get_ROI_paired passed')
 
+    def test_peak_activation_integration(self):
+        fnirs = Fnirslib(self.filename, self.regions, 0, 'condition_1')
+        data, stims = fnirs.load_nirs()
+        # TODO: test peak activation integration
+        print('test_peak_activation_integration passed')
 
-    # def test_get_ROI_unpaired(self):
-    #     NotImplementedError
+    def test_mean_activation_integration(self):
+        fnirs = Fnirslib(self.filename, self.regions, 0, 'condition_1')
+        data, stims = fnirs.load_nirs()
+        # TODO: test mean activation integration
+        print('test_mean_activation_integration passed')
+
+    def test_get_ROI_unpaired(self):
+        fnirs = Fnirslib(self.filename, self.regions, 0, 'condition_1', paired=False)
+        data, stims = fnirs.load_nirs()
+        # TODO: test unpaired
+        print('test_get_ROI_unpaired passed')
 
 
 
+class TestMetrics(unittest.TestCase):
+    def __init__(self, *args, **kwargs):
+        super(TestMetrics, self).__init__(*args, **kwargs)
+        # create a 2d test array
+        self.data = np.array([[1,2,3,4,5,6,7,8,9,10,11,12,13],
+                            [4,0,2,2,2,2,2,2,2,2,2,2,2],
+                            [2,2,2,2,2,2,4,2,2,2,2,2,2],
+                            [2,2,2,-2,9,-1,2,2,2,2,2,2,2]]).T
+        print(self.data.shape)
 
-    # def test_peak_activation(self):
-    #     peak_activation = 
-    #     print(peak_activation)
-    #     self.assertEqual(True, True)
+    def test_get_mean_activation(self):
+        d = Metrics(self.data)
+        print(d.get_mean_activation().shape)
+        print(d.get_mean_activation())
+        self.assertEqual(d.get_mean_activation().shape, (self.data.shape[1],)) # check shape
+        self.assertTrue(np.array_equal(d.get_mean_activation(), np.array([np.mean(self.data[:,0]),
+                                                                            np.mean(self.data[:,1]),
+                                                                            np.mean(self.data[:,2]),
+                                                                            np.mean(self.data[:,3])]))) # check values
+        print('test_get_mean_activation passed')
 
+    def test_get_peak_activation(self):
+        d = Metrics(self.data, peakPadding=1)
+        print(d.get_peak_activation().shape)
+        print(d.get_peak_activation())
+        self.assertEqual(d.get_peak_activation().shape, (self.data.shape[1],))
+        self.assertEqual(d.get_peak_activation(), np.max(self.data[:,0]))
 
-# class TestMetrics(unittest.TestCase):
-#     def __init__(self, *args, **kwargs):
-#         super(TestMetrics, self).__init__(*args, **kwargs)
-#         self.data, self.stim = generate_data(10, 44, 2, 1000, 2)
-#         print(self.data.shape)
-#         print(self.stim.shape)
-
-#     def test_get_mean_activation(self):
-#         d = Metrics(self.data)
-#         self.assertEqual(d.get_mean_activation().shape, (3,44))
-#         self.assertEqual(d.get_mean_activation()[0,0], 1)
-
-#     def test_get_peak_activation(self):
-#         data = np.ones((10,3,3))*2
-#         # data[]
-#         d = Metrics(data)
-#         self.assertEqual(d.get_peak_activation().shape, (3,3))    
-#         self.assertEqual(d.get_peak_activation()[0,0], 2)
+    # def test_functional_connectivity(self):
+    #     d = Metrics(self.data)
+    #     print(d.get_functional_connectivity().shape)
+    #     self.assertEqual(d.get_functional_connectivity().shape, (3,44))
+    #     self.assertEqual(d.get_functional_connectivity()[0,0], 1)
+   
 
 if __name__ == '__main__':
     unittest.main()

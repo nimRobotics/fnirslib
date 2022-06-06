@@ -1,11 +1,25 @@
-2022-06-05 16:03:25,771 - INFO - Processing condition 'condition_1' for file test_data.nirs
-2022-06-05 16:03:25,771 - INFO - Number of stims: 20
-2022-06-05 16:03:25,771 - INFO - Mean trial duration: 19.7
-2022-06-05 16:03:25,771 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
-2022-06-05 16:03:25,771 - INFO - Number of channels: 46, Number of regions: 11
-2022-06-05 16:03:25,771 - INFO - Number of observations in ROI: 11
-2022-06-05 16:03:25,772 - INFO - Processing condition 'condition_1' for file test_data.nirs
-2022-06-05 16:03:25,772 - INFO - Number of stims: 20
-2022-06-05 16:03:25,772 - INFO - Mean trial duration: 19.7
-2022-06-05 16:03:25,772 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
-2022-06-05 16:03:25,772 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:21:57,674 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
+2022-06-06 12:21:57,674 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:21:57,677 - INFO - Successfully loaded data from test_data.nirs
+2022-06-06 12:21:57,677 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-06 12:21:57,677 - INFO - Number of observations in ROI: 197
+2022-06-06 12:21:57,677 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
+2022-06-06 12:21:57,677 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:21:57,678 - INFO - Successfully loaded data from test_data.nirs
+2022-06-06 12:21:57,678 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-06 12:21:57,678 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
+2022-06-06 12:21:57,678 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:21:57,678 - INFO - Successfully loaded data from test_data.nirs
+2022-06-06 12:21:57,678 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-06 12:21:57,678 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
+2022-06-06 12:21:57,678 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:21:57,678 - INFO - Successfully loaded data from test_data.nirs
+2022-06-06 12:21:57,678 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-06 12:21:57,678 - INFO - Processing file 'test_data.nirs', with condition 'condition_1' ...
+2022-06-06 12:21:57,678 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-06 12:21:57,678 - INFO - Successfully loaded data from test_data.nirs
+2022-06-06 12:21:57,678 - INFO - Data shape: (1000, 3, 46), Stimulus data shape: (1000, 2)
+2022-06-06 12:21:57,679 - WARNING - Peak activation padding overshoots data at start
+2022-06-06 12:21:57,679 - WARNING - Peak activation padding overshoots data at start
+2022-06-06 12:21:57,679 - WARNING - Peak activation padding overshoots data at start
+2022-06-06 12:21:57,679 - WARNING - Peak activation padding overshoots data at start
