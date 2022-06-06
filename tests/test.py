@@ -39,14 +39,9 @@ def generate_data(num_trials, num_channels, num_conditions=2, num_samples=1000, 
         stim[starts[i*10:i*10+10], i] = 1
         stim[stops[i*10:i*10+10], i] = 1
 
-    i=0
     for start, stop in zip(starts, stops):
         data[start:stop, :] = 1
         data[int(np.mean([start, stop])),:, :] = peak_value
-        # print('### i:', i)
-        # i=i+1
-        # print(data[start:stop,0,0])
-
 
     return data, stim, starts, stops
 
@@ -102,22 +97,20 @@ class TestFnirslib(unittest.TestCase):
         # TODO: test unpaired
         print('test_get_ROI_unpaired passed')
 
-
-
 class TestMetrics(unittest.TestCase):
+    """
+    Test the metrics
+    """
     def __init__(self, *args, **kwargs):
         super(TestMetrics, self).__init__(*args, **kwargs)
         # create a 2d test array
         self.data = np.array([[1,2,3,4,5,6,7,8,9,10,11,12,13],
-                            [4,0,2,2,2,2,2,2,2,2,2,2,2],
+                            [3,1,2,2,2,2,2,2,2,2,2,2,2],
                             [2,2,2,2,2,2,4,2,2,2,2,2,2],
                             [2,2,2,-2,9,-1,2,2,2,2,2,2,2]]).T
-        print(self.data.shape)
 
     def test_get_mean_activation(self):
         d = Metrics(self.data)
-        print(d.get_mean_activation().shape)
-        print(d.get_mean_activation())
         self.assertEqual(d.get_mean_activation().shape, (self.data.shape[1],)) # check shape
         self.assertTrue(np.array_equal(d.get_mean_activation(), np.array([np.mean(self.data[:,0]),
                                                                             np.mean(self.data[:,1]),
@@ -127,17 +120,17 @@ class TestMetrics(unittest.TestCase):
 
     def test_get_peak_activation(self):
         d = Metrics(self.data, peakPadding=1)
-        print(d.get_peak_activation().shape)
-        print(d.get_peak_activation())
-        self.assertEqual(d.get_peak_activation().shape, (self.data.shape[1],))
-        self.assertEqual(d.get_peak_activation(), np.max(self.data[:,0]))
+        self.assertEqual(d.get_peak_activation().shape, (self.data.shape[1],)) # check shape
+        self.assertTrue(np.array_equal(d.get_peak_activation(), np.array([12.5, 2., 8/3., 2.]))) # check values
+        print('test_get_peak_activation passed')
 
-    # def test_functional_connectivity(self):
-    #     d = Metrics(self.data)
-    #     print(d.get_functional_connectivity().shape)
-    #     self.assertEqual(d.get_functional_connectivity().shape, (3,44))
-    #     self.assertEqual(d.get_functional_connectivity()[0,0], 1)
-   
+    def test_functional_connectivity(self):
+        con,_ = Metrics(self.data.T).get_functional_connectivity()
+        print(con.shape)
+        # get diagonal
+        diag = np.diag(np.diag(con))
+        print(diag)
+        self.assertEqual(con.shape, (self.data.shape[1], self.data.shape[1])) # check shape
 
 if __name__ == '__main__':
     unittest.main()
