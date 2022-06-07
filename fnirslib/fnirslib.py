@@ -57,7 +57,7 @@ class Fnirslib:
         logging.info("Data shape: {}, Stimulus data shape: {}".format(data.shape, stims.shape))
         return data, stims
 
-    def sanity_check(self, data, stims):
+    def sanity_check(self, data, stims, trialTimes):
         """
         :param stims: stimulus data
         :param data: data
@@ -81,9 +81,9 @@ class Fnirslib:
             logging.info("Trial starts: {}".format(start_stim))
             logging.info("Trial ends: {}".format(end_stim))
         elif not self.paired:
-            mean_duration = np.mean(self.trialTimes)
+            mean_duration = np.mean(trialTimes)
             logging.info("Trial starts: {}".format(np.where(stims[:,self.stimNumber]==1)[0]))
-            logging.info("Trial durations: {}".format(self.trialTimes))
+            logging.info("Trial durations: {}".format(trialTimes))
         logging.info("Mean trial duration: {}".format(mean_duration))
 
     def _find_islands(self, x):
@@ -129,8 +129,8 @@ class Fnirslib:
     def get_ROI(self, data, stims,  equalize=False,  aggMethod='concat', trialTimes=None, freq=None):
         """
         get ROI data for the stimulus condition
-        :param data: data
-        :param stims: stimulus data
+        :param data: data, type: numpy array
+        :param stims: stimulus data, type: numpy array
         :param equalize: equalize the number of obs in all trials, automatically set True if aggMethod is 'mean', type: bool
         :param aggMethod: method to aggregate data, either 'concat' or 'mean' the trials, type: str
         :param trialTimes: array of trial durations, cannot be None if stimPair is False, type: list
