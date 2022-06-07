@@ -57,7 +57,7 @@ class Fnirslib:
         logging.info("Data shape: {}, Stimulus data shape: {}".format(data.shape, stims.shape))
         return data, stims
 
-    def sanity_check(self, data, stims, trialTimes):
+    def sanity_check(self, data, stims, trialTimes=None):
         """
         :param stims: stimulus data
         :param data: data
