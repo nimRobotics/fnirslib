@@ -59,8 +59,9 @@ class Fnirslib:
 
     def sanity_check(self, data, stims, trialTimes=None):
         """
-        :param stims: stimulus data
         :param data: data
+        :param stims: stimulus data
+        :param trialTimes: trial times
         :return: None
         """
         assert stims.shape[1]>=self.stimNumber+1, 'Stimulus column {} not found'.format(self.stimNumber)
@@ -96,14 +97,16 @@ class Fnirslib:
         """
         return np.sum(x[1:] & ~x[:-1]) + x[0]
 
-    def _insert_end_stim(self, stims):
+    def _insert_end_stim(self, stims, trialTimes, freq):
         '''
         insert end stims to the trials
         :param stims: stimulus data
+        :param trialTimes: trial times
+        :param freq: sampling frequency
         :return: stims with end stims
         '''
         startIdx = np.nonzero(stims[:,self.stimNumber])[0]  # get index of start stim
-        stopIdx = startIdx + np.array(self.trialTimes*self.freq, dtype=np.int64)[:startIdx.shape[0]]
+        stopIdx = startIdx + np.array(trialTimes*freq, dtype=np.int64)[:startIdx.shape[0]]
 
         # if last idx is greater than the length of the data, set it equal to length of data
         if stopIdx[-1]>stims.shape[0]:
@@ -141,7 +144,7 @@ class Fnirslib:
         """
         if not self.paired:
             # print('# stims before pairing: ', np.count_nonzero(stims[:,self.stimNumber]))
-            stims = self._insert_end_stim(stims)
+            stims = self._insert_end_stim(stims, trialTimes, freq)
             # print('# stims after pairing: ', np.count_nonzero(stims[:,self.stimNumber]))
 
         assert np.count_nonzero(stims[:,self.stimNumber])%2==0, "Number of stims should be even"
