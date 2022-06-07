@@ -81,6 +81,8 @@ class Fnirslib:
             logging.info("Trial starts: {}".format(start_stim))
             logging.info("Trial ends: {}".format(end_stim))
         elif not self.paired:
+            if trialTimes is None:
+                logging.error("Trial times not provided")
             mean_duration = np.mean(trialTimes)
             logging.info("Trial starts: {}".format(np.where(stims[:,self.stimNumber]==1)[0]))
             logging.info("Trial durations: {}".format(trialTimes))
