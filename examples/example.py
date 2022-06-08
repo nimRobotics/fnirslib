@@ -5,7 +5,6 @@ description: example of how to use the fnirslib package
 
 # from fnirslib.fnirslib import Fnirslib
 # from fnirslib.plots import plotData
-from pickle import SETITEMS
 import sys
 sys.path.append('../')
 from fnirslib.fnirslib import *
@@ -98,7 +97,7 @@ for stimNumber, condition in zip(stimulus, conditions):
     
     # apply threshold
     if threshold is not None:
-        avgCorr[np.where(avgZscores < threshold)] = np.NaN
+        avgCorr[np.where(np.abs(avgZscores) < threshold)] = np.NaN
     # save the average correlation for each condition as .mat
     scipy.io.savemat(output_dir+'/{}_avgCorr.mat'.format(condition), mdict={'avgCorr': avgCorr})
     # make plots for functional connectivity
