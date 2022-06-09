@@ -8,7 +8,6 @@ description: example of how to use the fnirslib package
 import sys
 sys.path.append('../')
 from fnirslib.fnirslib import *
-from fnirslib.metrics import *
 from fnirslib.plots import plotData
 import glob
 import logging
@@ -17,6 +16,7 @@ import pandas as pd
 import numpy as np
 import scipy.io
 from pathlib import Path
+import itertools
 
 output_dir = './output_{}'.format(datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
 # create output directory
@@ -48,17 +48,16 @@ files = glob.glob(in_dir+'/*.nirs') # get all the files in the directory
 assert len(files) > 0, 'No files found in the directory'
 assert len(stimulus) == len(conditions), 'Number of stimulus should be equal to the len of conditions array'
 
-# initialize a pd df
 actDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+['C'+str(i) for i in range(sum([len(e) for e in regions]))]) # store data for each channel
 # actDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+labels) # store data for each brain region
+FCDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+[i+'-'+j for i,j in list(itertools.combinations(labels, 2))]) # store FC con data
 
-avgCorr = np.zeros((len(regions),len(regions)))
-avgZscores = np.zeros((len(regions),len(regions)))
 # loop through all the files and conditions
 for stimNumber, condition in zip(stimulus, conditions):
+    avgCorr = np.zeros((len(regions),len(regions)))
+    avgZscores = np.zeros((len(regions),len(regions)))
     for file in files:
         print("\nProcessing condition '{}' for file {}".format(condition,file))
-
         try:
             # perform activation analysis on mean aggregated data
             fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
@@ -89,17 +88,28 @@ for stimNumber, condition in zip(stimulus, conditions):
             avgCorr = np.mean( np.array([ avgCorr, corr ]), axis=0 ) # average over files/participants
             avgZscores = np.mean( np.array([ avgZscores, zscores ]), axis=0 ) # average over files/participants
             fnirs.save_processed_data(data, stims, output_dir+'/processed_con')
-
+            # save the data for each individual, each file thresholded separately
+            if threshold is not None:
+                corr[np.where(np.abs(zscores) < threshold)] = 0
+            triuCorr = corr[np.triu_indices(len(corr), 1)] # get the upper triangle of the correlation matrix
+            FCDF.loc[len(FCDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(triuCorr)
         except Exception as e:
             print(e)
             logging.error(e)
             continue
     
-    # apply threshold
-    if threshold is not None:
-        avgCorr[np.where(np.abs(avgZscores) < threshold)] = np.NaN
-    # save the average correlation for each condition as .mat
+    # save average correlation, zscores as .mat and .csv
     scipy.io.savemat(output_dir+'/{}_avgCorr.mat'.format(condition), mdict={'avgCorr': avgCorr})
+    scipy.io.savemat(output_dir+'/{}_avgZscores.mat'.format(condition), mdict={'avgZscores': avgZscores})
+    pd.DataFrame(avgCorr, index=labels, columns=labels).to_csv(output_dir+'/{}_avgCorr.csv'.format(condition))
+    pd.DataFrame(avgZscores, index=labels, columns=labels).to_csv(output_dir+'/{}_avgZscores.csv'.format(condition))
+    # apply threshold to the average data
+    if threshold is not None:
+        avgCorr[np.where(avgZscores < threshold)] = np.NaN
+    # save the average correlation matrix after thresholding
+    scipy.io.savemat(output_dir+'/{}_avgCorrThresholded.mat'.format(condition), mdict={'avgCorr': avgCorr})
+    pd.DataFrame(avgCorr, index=labels, columns=labels).to_csv(output_dir+'/{}_avgCorrThresholded.csv'.format(condition))
+    
     # make plots for functional connectivity
     plot = plotData(avgCorr, labels, output_dir+'/', colormap='jet', dpi=300, title='FC: '+condition, filename='FC_'+condition +'.png') 
     plot.matrixPlot()
@@ -107,5 +117,6 @@ for stimNumber, condition in zip(stimulus, conditions):
 
 ## TODO: save all data in a CSV file
 actDF.to_csv(output_dir+'/activations.csv', index=False)
+FCDF.to_csv(output_dir+'/FC.csv', index=False)
 
 
