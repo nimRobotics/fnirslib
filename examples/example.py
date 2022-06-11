@@ -48,9 +48,12 @@ files = glob.glob(in_dir+'/*.nirs') # get all the files in the directory
 assert len(files) > 0, 'No files found in the directory'
 assert len(stimulus) == len(conditions), 'Number of stimulus should be equal to the len of conditions array'
 
-actDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+['C'+str(i) for i in range(sum([len(e) for e in regions]))]) # store data for each channel
-actClusteredDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+labels) # store data for each brain region
-FCDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+[i+'-'+j for i,j in list(itertools.combinations(labels, 2))]) # store FC con data
+# initialize dataframes to store results
+peakActDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+['C'+str(i) for i in range(sum([len(e) for e in regions]))]) # store peak activation data for each channel
+peakActClustDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+labels) # store peak activation data for each brain region
+meanActDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+['C'+str(i) for i in range(sum([len(e) for e in regions]))]) # store mean activation data for each channel
+meanActClustDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+labels) # store mean activation data for each brain region
+funcConDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+[i+'-'+j for i,j in list(itertools.combinations(labels, 2))]) # store FC con data
 
 # loop through all the files and conditions
 for stimNumber, condition in zip(stimulus, conditions):
@@ -58,49 +61,47 @@ for stimNumber, condition in zip(stimulus, conditions):
     avgZscores = np.zeros((len(regions),len(regions)))
     for file in files:
         print("\nProcessing condition '{}' for file {}".format(condition,file))
-        # try:
-        # perform activation analysis on mean aggregated data
-        fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
-        logging.info("Activation analysis! averaging trial data")
-        data, stims = fnirs.load_nirs() # load the data
-        fnirs.sanity_check(data, stims) # check the data
-        data, stims = fnirs.get_ROI(data, stims, aggMethod='mean')
-        # data = fnirs.detrend(data) # detrend the data
-        # data = fnirs.cluster_channels(data) # cluster the channels into regions
-        data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
-        peak = fnirs.peak_activation(data, peakPadding=5) # get the peak activation
-        mean = fnirs.mean_activation(data) # get the mean activation
-        actDF.loc[len(actDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
-        print(peak.shape)
-        peak = fnirs.cluster_channels(peak)
-        print('peak shape', peak.shape)
-        actClusteredDF.loc[len(actClusteredDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
-        fnirs.save_processed_data(data, stims, output_dir+'/processed_act')
+        try:
+            # perform activation analysis on mean aggregated data
+            fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
+            logging.info("Activation analysis! averaging trial data")
+            data, stims = fnirs.load_nirs() # load the data
+            fnirs.sanity_check(data, stims) # check the data
+            data, stims = fnirs.get_ROI(data, stims, aggMethod='mean')
+            data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
+            peak = fnirs.peak_activation(data, peakPadding=5) # get the peak activation
+            mean = fnirs.mean_activation(data) # get the mean activation
+            peakActDF.loc[len(peakActDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
+            meanActDF.loc[len(meanActDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(mean)
+            peak = fnirs.cluster_channels(peak) # cluster data into regions
+            peakActClustDF.loc[len(peakActClustDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
+            meanActClustDF.loc[len(meanActClustDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
+            fnirs.save_processed_data(data, stims, output_dir+'/processed_act') # save processed fnirs data
 
-        # perform connectivity analysis on concatenated data
-        fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
-        logging.info("Connectivity analysis! concatenating trial data")
-        data, stims = fnirs.load_nirs() # load the data
-        fnirs.sanity_check(data, stims) # check the data
-        data, stims = fnirs.get_ROI(data, stims, aggMethod='concat', equalize=False) # get the ROI data
-        data = fnirs.detrend(data) # detrend the data
-        data = fnirs.cluster_channels(data) # cluster the channels into regions
-        data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
-        # econ = fnirs.effective_connectivity(data)
-        corr,zscores = fnirs.functional_connectivity(data.T)
-        print('Corr shape: {}, Zscores shape: {}'.format(corr.shape, zscores.shape))
-        avgCorr = np.mean( np.array([ avgCorr, corr ]), axis=0 ) # average over files/participants
-        avgZscores = np.mean( np.array([ avgZscores, zscores ]), axis=0 ) # average over files/participants
-        fnirs.save_processed_data(data, stims, output_dir+'/processed_con')
-        # save the data for each individual, each file thresholded separately
-        if threshold is not None:
-            corr[np.where(np.abs(zscores) < threshold)] = 0
-        triuCorr = corr[np.triu_indices(len(corr), 1)] # get the upper triangle of the correlation matrix
-        FCDF.loc[len(FCDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(triuCorr)
-        # except Exception as e:
-        #     print(e)
-        #     logging.error(e)
-        #     continue
+            # perform connectivity analysis on concatenated data
+            fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
+            logging.info("Connectivity analysis! concatenating trial data")
+            data, stims = fnirs.load_nirs() # load the data
+            fnirs.sanity_check(data, stims) # check the data
+            data, stims = fnirs.get_ROI(data, stims, aggMethod='concat', equalize=False) # get the ROI data
+            data = fnirs.detrend(data) # detrend the data
+            data = fnirs.cluster_channels(data) # cluster the channels into regions
+            data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
+            # econ = fnirs.effective_connectivity(data)
+            corr,zscores = fnirs.functional_connectivity(data.T)
+            print('Corr shape: {}, Zscores shape: {}'.format(corr.shape, zscores.shape))
+            avgCorr = np.mean( np.array([ avgCorr, corr ]), axis=0 ) # average over files/participants
+            avgZscores = np.mean( np.array([ avgZscores, zscores ]), axis=0 ) # average over files/participants
+            fnirs.save_processed_data(data, stims, output_dir+'/processed_con') # save processed fnirs data
+            # save the data for each individual, each file thresholded separately
+            if threshold is not None:
+                corr[np.where(np.abs(zscores) < threshold)] = 0
+            triuCorr = corr[np.triu_indices(len(corr), 1)] # get the upper triangle of the correlation matrix
+            funcConDF.loc[len(funcConDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(triuCorr)
+        except Exception as e:
+            print(e)
+            logging.error(e)
+            continue
     
     # save average correlation, zscores as .mat and .csv
     scipy.io.savemat(output_dir+'/{}_avgCorr.mat'.format(condition), mdict={'avgCorr': avgCorr})
@@ -109,7 +110,7 @@ for stimNumber, condition in zip(stimulus, conditions):
     pd.DataFrame(avgZscores, index=labels, columns=labels).to_csv(output_dir+'/{}_avgZscores.csv'.format(condition))
     # apply threshold to the average data
     if threshold is not None:
-        avgCorr[np.where(avgZscores < threshold)] = np.NaN
+        avgCorr[np.where(np.abs(avgZscores) < threshold)] = np.NaN
     # save the average correlation matrix after thresholding
     scipy.io.savemat(output_dir+'/{}_avgCorrThresholded.mat'.format(condition), mdict={'avgCorr': avgCorr})
     pd.DataFrame(avgCorr, index=labels, columns=labels).to_csv(output_dir+'/{}_avgCorrThresholded.csv'.format(condition))
@@ -119,9 +120,11 @@ for stimNumber, condition in zip(stimulus, conditions):
     plot.matrixPlot()
     plot.circularPlot()
 
-## TODO: save all data in a CSV file
-actDF.to_csv(output_dir+'/activations.csv', index=False)
-actClusteredDF.to_csv(output_dir+'/activations_clustered.csv', index=False)
-FCDF.to_csv(output_dir+'/FC.csv', index=False)
+## save all data in a CSV file
+peakActDF.to_csv(output_dir+'/peakAct.csv', index=False)
+meanActDF.to_csv(output_dir+'/meanAct.csv', index=False)
+peakActClustDF.to_csv(output_dir+'/peakActClust.csv', index=False)
+meanActClustDF.to_csv(output_dir+'/meanActClust.csv', index=False)
+funcConDF.to_csv(output_dir+'/funcCon.csv', index=False)
 
 
