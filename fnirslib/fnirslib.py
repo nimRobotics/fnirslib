@@ -184,8 +184,7 @@ class Fnirslib:
             outData = np.zeros((data.shape[0], data.shape[1], self.nRegions))
             for i,region in enumerate(self.regions):
                 outData[:,:,i] = np.mean(data[:,:,region], axis=2)
-        data = outData
-        return data
+        return outData
 
     def detrend(self, data):
         """
