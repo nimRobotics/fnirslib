@@ -4,7 +4,6 @@ description: class for processing fnirs data
 """
 
 import numpy as np
-import pandas as pd
 import scipy.io
 import scipy.signal
 from . import metrics
@@ -173,7 +172,7 @@ class Fnirslib:
         :return: clustered data for the brain regions
         """
         if data.ndim==1:
-            outData = np.mean(data, axis=0)
+            outData = np.zeros((self.nRegions,))
             for i,region in enumerate(self.regions):
                 outData[i] = np.mean(data[region], axis=0)
         elif data.ndim==2:
