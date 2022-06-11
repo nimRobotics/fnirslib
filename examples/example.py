@@ -72,6 +72,8 @@ for stimNumber, condition in zip(stimulus, conditions):
             mean = fnirs.mean_activation(data) # get the mean activation
             actDF.loc[len(actDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
             print(peak.shape)
+            peak = fnirs.cluster_channels(peak)
+            actClusteredDF.loc[len(actClusteredDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
             fnirs.save_processed_data(data, stims, output_dir+'/processed_act')
 
             # perform connectivity analysis on concatenated data
@@ -118,6 +120,7 @@ for stimNumber, condition in zip(stimulus, conditions):
 
 ## TODO: save all data in a CSV file
 actDF.to_csv(output_dir+'/activations.csv', index=False)
+actClusteredDF.to_csv(output_dir+'/activations_clustered.csv', index=False)
 FCDF.to_csv(output_dir+'/FC.csv', index=False)
 
 
