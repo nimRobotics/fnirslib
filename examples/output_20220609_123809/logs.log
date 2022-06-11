@@ -1,0 +1,21 @@
+2022-06-09 12:38:09,566 - INFO - Processing file './rawData/012.nirs', with condition 'normal' ...
+2022-06-09 12:38:09,567 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-09 12:38:09,567 - INFO - Activation analysis! averaging trial data
+2022-06-09 12:38:09,703 - INFO - Successfully loaded data from ./rawData/012.nirs
+2022-06-09 12:38:09,703 - INFO - Data shape: (11433, 3, 46), Stimulus data shape: (11433, 4)
+2022-06-09 12:38:09,703 - INFO - Number of stims: 20
+2022-06-09 12:38:09,704 - INFO - Trial starts: [1261 1719 2173 2696 3206 3609 4048 4424 4794 5169]
+2022-06-09 12:38:09,704 - INFO - Trial ends: [1485 1974 2521 2946 3445 3857 4302 4667 5032 5431]
+2022-06-09 12:38:09,704 - INFO - Mean trial duration: 256.1
+2022-06-09 12:38:09,706 - INFO - Number of observations in ROI: 224
+2022-06-09 12:38:09,743 - INFO - Saved data to ./output_20220609_123809/processed_act/normal/012.mat
+2022-06-09 12:38:09,743 - INFO - Processing file './rawData/012.nirs', with condition 'normal' ...
+2022-06-09 12:38:09,743 - INFO - Number of channels: 46, Number of regions: 11
+2022-06-09 12:38:09,743 - INFO - Connectivity analysis! concatenating trial data
+2022-06-09 12:38:09,867 - INFO - Successfully loaded data from ./rawData/012.nirs
+2022-06-09 12:38:09,867 - INFO - Data shape: (11433, 3, 46), Stimulus data shape: (11433, 4)
+2022-06-09 12:38:09,868 - INFO - Number of stims: 20
+2022-06-09 12:38:09,868 - INFO - Trial starts: [1261 1719 2173 2696 3206 3609 4048 4424 4794 5169]
+2022-06-09 12:38:09,868 - INFO - Trial ends: [1485 1974 2521 2946 3445 3857 4302 4667 5032 5431]
+2022-06-09 12:38:09,868 - INFO - Mean trial duration: 256.1
+2022-06-09 12:38:09,869 - INFO - Number of observations in ROI: 2561

@@ -49,7 +49,7 @@ assert len(files) > 0, 'No files found in the directory'
 assert len(stimulus) == len(conditions), 'Number of stimulus should be equal to the len of conditions array'
 
 actDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+['C'+str(i) for i in range(sum([len(e) for e in regions]))]) # store data for each channel
-# actDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+labels) # store data for each brain region
+actClusteredDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+labels) # store data for each brain region
 FCDF = pd.DataFrame(columns=['ID', 'sex', 'condition']+[i+'-'+j for i,j in list(itertools.combinations(labels, 2))]) # store FC con data
 
 # loop through all the files and conditions
@@ -71,6 +71,7 @@ for stimNumber, condition in zip(stimulus, conditions):
             peak = fnirs.peak_activation(data, peakPadding=5) # get the peak activation
             mean = fnirs.mean_activation(data) # get the mean activation
             actDF.loc[len(actDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
+            print(peak.shape)
             fnirs.save_processed_data(data, stims, output_dir+'/processed_act')
 
             # perform connectivity analysis on concatenated data

@@ -172,7 +172,11 @@ class Fnirslib:
         :param data: data
         :return: clustered data for the brain regions
         """
-        if data.ndim==2:
+        if data.ndim==1:
+            outData = np.mean(data, axis=0)
+            for i,region in enumerate(self.regions):
+                outData[i] = np.mean(data[region], axis=0)
+        elif data.ndim==2:
             outData = np.zeros((data.shape[0], self.nRegions))
             for i,region in enumerate(self.regions):
                 outData[:,i] = np.mean(data[:,region], axis=1)
