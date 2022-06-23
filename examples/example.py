@@ -42,6 +42,8 @@ threshold = 0.4
 labels = ['APFC', 'MDPFC', 'RDPFC', 'LDPFC', 'IFC', 'RBA', 'LBA', 'PMC-SMA', 'M1', 'V2-V3', 'V1']
 in_dir = './rawData'
 stimulus=[2,3] # stimulus numbers, 2-normal, 3-attack 
+baseline_stim=0 # baseline stim 
+sig_type=0  # 0 for HbO, 1 for HbR, 2 for HbT
 conditions = ['normal', 'attack'] # condition labels
 files = glob.glob(in_dir+'/*.nirs') # get all the files in the directory
 
@@ -66,10 +68,11 @@ for stimNumber, condition in zip(stimulus, conditions):
             fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
             logging.info("Activation analysis! averaging trial data")
             data, stims = fnirs.load_nirs() # load the data
+            baseline = fnirs.get_baseline(data, stims, baseline_stim, sig_type) # get the baseline
             fnirs.sanity_check(data, stims) # check the data
             data, stims = fnirs.get_ROI(data, stims, aggMethod='mean')
-            data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
-            peak = fnirs.peak_activation(data, peakPadding=5) # get the peak activation
+            data = data[:,sig_type,:] # 0 for HbO, 1 for HbR, 2 for HbT
+            peak = fnirs.peak_activation(data, baseline, peakPadding=5) # get the peak activation
             mean = fnirs.mean_activation(data) # get the mean activation
             peakActDF.loc[len(peakActDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
             meanActDF.loc[len(meanActDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(mean)
@@ -86,7 +89,7 @@ for stimNumber, condition in zip(stimulus, conditions):
             data, stims = fnirs.get_ROI(data, stims, aggMethod='concat', equalize=False) # get the ROI data
             data = fnirs.detrend(data) # detrend the data
             data = fnirs.cluster_channels(data) # cluster the channels into regions
-            data = data[:,0,:] # 0 for HbO, 1 for HbR, 2 for HbT
+            data = data[:,sig_type,:] # 0 for HbO, 1 for HbR, 2 for HbT
             # econ = fnirs.effective_connectivity(data)
             corr,zscores = fnirs.functional_connectivity(data.T)
             print('Corr shape: {}, Zscores shape: {}'.format(corr.shape, zscores.shape))

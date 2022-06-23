@@ -88,6 +88,23 @@ class Fnirslib:
             logging.info("Trial durations: {}".format(trialTimes))
         logging.info("Mean trial duration: {}".format(mean_duration))
 
+    def get_baseline(self, data, stims, baseline_stim, sig_type):
+        """
+        Gets the baseline
+        :param data: data
+        :param stims: stimulus data
+        :param baseline_stim: baseline stimulus
+        :param sig_type: signal type, 0 HbO, 1 HbR, 2 HbT
+        :return: baseline data
+        """
+        loc = np.where(stims[:,baseline_stim]==1)[0]
+        if loc.shape[0] !=2:
+            raise ValueError('Baseline stim not found')
+        baseline = data[loc[0]:loc[1],:]
+        baseline = baseline[:,sig_type,:]
+        baseline = np.mean(baseline, axis=0)
+        return baseline
+
     def _find_islands(self, x):
         """
         Finds islands of 1s in the data
@@ -201,10 +218,11 @@ class Fnirslib:
         """
         return data/np.max(data)
 
-    def peak_activation(self, data, peakPadding=4):
+    def peak_activation(self, data, baseline=None, peakPadding=4):
         """
         Finds the peak activation of the data
         :param data: data
+        :param baseline: baseline data
         :param peakPadding: number of samples to pad the peak
         :return: peak activations
         """

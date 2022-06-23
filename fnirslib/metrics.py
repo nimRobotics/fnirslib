@@ -29,10 +29,11 @@ class Metrics:
         """
         return np.mean(self.data, axis=0)
 
-    def get_peak_activation(self):
+    def get_peak_activation(self, baseline=None):
         """
         Get peak activation for each region
         :param data: HbO, Hbr or HbT data
+        :param baseline: baseline to be subtracted from data
         :param padding: padding to be considered surrounding the peak
         :return: peak activation for each region
         """
@@ -51,6 +52,9 @@ class Metrics:
             else:
                 # print(self.data[maxIdx-self.peakPadding:maxIdx+self.peakPadding+1,i])
                 peakActivation[i] = np.mean(self.data[maxIdx-self.peakPadding:maxIdx+self.peakPadding+1,i])
+            # subtract baseline if baseline is provided
+            if baseline is not None:
+                peakActivation[i] -= baseline[i]
         return peakActivation
 
     def get_functional_connectivity(self):
