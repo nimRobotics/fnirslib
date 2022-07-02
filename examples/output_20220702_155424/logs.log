@@ -1,0 +1,24 @@
+2022-07-02 15:54:24,261 - INFO - Processing file './rawData/012.nirs', with condition 'normal' ...
+2022-07-02 15:54:24,262 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:54:24,262 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:54:24,390 - INFO - Successfully loaded data from ./rawData/012.nirs
+2022-07-02 15:54:24,390 - INFO - Data shape: (11433, 3, 46), Stimulus data shape: (11433, 4)
+2022-07-02 15:54:24,390 - ERROR - list.append() takes no keyword arguments
+2022-07-02 15:54:24,390 - INFO - Processing file './rawData/032.nirs', with condition 'normal' ...
+2022-07-02 15:54:24,390 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:54:24,390 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:54:24,574 - INFO - Successfully loaded data from ./rawData/032.nirs
+2022-07-02 15:54:24,574 - INFO - Data shape: (16470, 3, 46), Stimulus data shape: (16470, 4)
+2022-07-02 15:54:24,575 - ERROR - list.append() takes no keyword arguments
+2022-07-02 15:54:25,267 - INFO - Processing file './rawData/012.nirs', with condition 'attack' ...
+2022-07-02 15:54:25,267 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:54:25,267 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:54:25,392 - INFO - Successfully loaded data from ./rawData/012.nirs
+2022-07-02 15:54:25,393 - INFO - Data shape: (11433, 3, 46), Stimulus data shape: (11433, 4)
+2022-07-02 15:54:25,393 - ERROR - list.append() takes no keyword arguments
+2022-07-02 15:54:25,393 - INFO - Processing file './rawData/032.nirs', with condition 'attack' ...
+2022-07-02 15:54:25,393 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:54:25,393 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:54:25,573 - INFO - Successfully loaded data from ./rawData/032.nirs
+2022-07-02 15:54:25,573 - INFO - Data shape: (16470, 3, 46), Stimulus data shape: (16470, 4)
+2022-07-02 15:54:25,574 - ERROR - list.append() takes no keyword arguments

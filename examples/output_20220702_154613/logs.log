@@ -1,0 +1,24 @@
+2022-07-02 15:46:13,844 - INFO - Processing file './rawData/012.nirs', with condition 'normal' ...
+2022-07-02 15:46:13,844 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:46:13,844 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:46:13,972 - INFO - Successfully loaded data from ./rawData/012.nirs
+2022-07-02 15:46:13,972 - INFO - Data shape: (11433, 3, 46), Stimulus data shape: (11433, 4)
+2022-07-02 15:46:13,973 - ERROR - 'list' object has no attribute 'shape'
+2022-07-02 15:46:13,973 - INFO - Processing file './rawData/032.nirs', with condition 'normal' ...
+2022-07-02 15:46:13,973 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:46:13,973 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:46:14,157 - INFO - Successfully loaded data from ./rawData/032.nirs
+2022-07-02 15:46:14,157 - INFO - Data shape: (16470, 3, 46), Stimulus data shape: (16470, 4)
+2022-07-02 15:46:14,158 - ERROR - 'list' object has no attribute 'shape'
+2022-07-02 15:46:14,839 - INFO - Processing file './rawData/012.nirs', with condition 'attack' ...
+2022-07-02 15:46:14,839 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:46:14,839 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:46:14,965 - INFO - Successfully loaded data from ./rawData/012.nirs
+2022-07-02 15:46:14,965 - INFO - Data shape: (11433, 3, 46), Stimulus data shape: (11433, 4)
+2022-07-02 15:46:14,965 - ERROR - 'list' object has no attribute 'shape'
+2022-07-02 15:46:14,965 - INFO - Processing file './rawData/032.nirs', with condition 'attack' ...
+2022-07-02 15:46:14,965 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:46:14,965 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:46:15,145 - INFO - Successfully loaded data from ./rawData/032.nirs
+2022-07-02 15:46:15,145 - INFO - Data shape: (16470, 3, 46), Stimulus data shape: (16470, 4)
+2022-07-02 15:46:15,148 - ERROR - 'list' object has no attribute 'shape'

@@ -88,7 +88,7 @@ class Fnirslib:
             logging.info("Trial durations: {}".format(trialTimes))
         logging.info("Mean trial duration: {}".format(mean_duration))
 
-    def get_baseline(self, data, stims, baseline_stim, sig_type):
+    def get_global_baseline(self, data, stims, baseline_stim, sig_type):
         """
         Gets the baseline
         :param data: data
@@ -104,6 +104,26 @@ class Fnirslib:
         baseline = baseline[:,sig_type,:]
         baseline = np.mean(baseline, axis=0)
         return baseline
+
+    def get_local_baseline(self, data, stims, sig_type, duration, freq):
+        """
+        Gets the local baseline
+        :param data: data
+        :param stims: stimulus data
+        :param sig_type: signal type, 0 HbO, 1 HbR, 2 HbT
+        :param duration: duration of the baseline in seconds
+        :param freq: sampling frequency
+        :return: local baseline data
+        """
+        num_obs = int(duration*freq) # number of observations in the baseline
+        loc = np.where(stims[:,self.stimNumber]==1)[0] # get indices of stims
+        starts = loc[::2] # get start indices
+        baseline = []
+        for start in starts:
+            baseline.append(np.mean(data[start-num_obs+1:start,sig_type,:], axis=0))
+        baseline = np.array(baseline)
+        print(baseline.shape)
+        return np.array(baseline)
 
     def _find_islands(self, x):
         """

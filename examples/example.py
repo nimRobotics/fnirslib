@@ -45,6 +45,7 @@ stimulus=[2,3] # stimulus numbers, 2-normal, 3-attack
 baseline_stim=0 # baseline stim 
 sig_type=0  # 0 for HbO, 1 for HbR, 2 for HbT
 conditions = ['normal', 'attack'] # condition labels
+freq = 4.2 # sampling frequency
 files = glob.glob(in_dir+'/*.nirs') # get all the files in the directory
 
 assert len(files) > 0, 'No files found in the directory'
@@ -68,7 +69,8 @@ for stimNumber, condition in zip(stimulus, conditions):
             fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
             logging.info("Activation analysis! averaging trial data")
             data, stims = fnirs.load_nirs() # load the data
-            baseline = fnirs.get_baseline(data, stims, baseline_stim, sig_type) # get the baseline
+            # baseline = fnirs.get_global_baseline(data, stims, baseline_stim, sig_type) # get the baseline
+            baseline = fnirs.get_local_baseline(data, stims, sig_type, duration=2, freq=freq) # get the baseline
             fnirs.sanity_check(data, stims) # check the data
             data, stims = fnirs.get_ROI(data, stims, aggMethod='mean')
             data = data[:,sig_type,:] # 0 for HbO, 1 for HbR, 2 for HbT

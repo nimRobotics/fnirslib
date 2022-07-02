@@ -1,0 +1,24 @@
+2022-07-02 15:47:29,395 - INFO - Processing file './rawData/012.nirs', with condition 'normal' ...
+2022-07-02 15:47:29,395 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:47:29,395 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:47:29,521 - INFO - Successfully loaded data from ./rawData/012.nirs
+2022-07-02 15:47:29,521 - INFO - Data shape: (11433, 3, 46), Stimulus data shape: (11433, 4)
+2022-07-02 15:47:29,522 - ERROR - name 'bn' is not defined
+2022-07-02 15:47:29,522 - INFO - Processing file './rawData/032.nirs', with condition 'normal' ...
+2022-07-02 15:47:29,522 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:47:29,522 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:47:29,704 - INFO - Successfully loaded data from ./rawData/032.nirs
+2022-07-02 15:47:29,704 - INFO - Data shape: (16470, 3, 46), Stimulus data shape: (16470, 4)
+2022-07-02 15:47:29,705 - ERROR - name 'bn' is not defined
+2022-07-02 15:47:30,391 - INFO - Processing file './rawData/012.nirs', with condition 'attack' ...
+2022-07-02 15:47:30,391 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:47:30,391 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:47:30,518 - INFO - Successfully loaded data from ./rawData/012.nirs
+2022-07-02 15:47:30,518 - INFO - Data shape: (11433, 3, 46), Stimulus data shape: (11433, 4)
+2022-07-02 15:47:30,518 - ERROR - name 'bn' is not defined
+2022-07-02 15:47:30,519 - INFO - Processing file './rawData/032.nirs', with condition 'attack' ...
+2022-07-02 15:47:30,519 - INFO - Number of channels: 46, Number of regions: 11
+2022-07-02 15:47:30,519 - INFO - Activation analysis! averaging trial data
+2022-07-02 15:47:30,699 - INFO - Successfully loaded data from ./rawData/032.nirs
+2022-07-02 15:47:30,699 - INFO - Data shape: (16470, 3, 46), Stimulus data shape: (16470, 4)
+2022-07-02 15:47:30,700 - ERROR - name 'bn' is not defined
