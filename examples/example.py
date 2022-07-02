@@ -69,12 +69,14 @@ for stimNumber, condition in zip(stimulus, conditions):
             fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
             logging.info("Activation analysis! averaging trial data")
             data, stims = fnirs.load_nirs() # load the data
+            fnirs.sanity_check(data, stims) # check the data
             # baseline = fnirs.get_global_baseline(data, stims, baseline_stim, sig_type) # get the baseline
             baseline = fnirs.get_local_baseline(data, stims, sig_type, duration=2, freq=freq) # get the baseline
-            fnirs.sanity_check(data, stims) # check the data
+            print("data shape: {}".format(data.shape))
             data, stims = fnirs.get_ROI(data, stims, aggMethod='mean')
             data = data[:,sig_type,:] # 0 for HbO, 1 for HbR, 2 for HbT
             peak = fnirs.peak_activation(data, baseline, peakPadding=5) # get the peak activation
+            print("peak shape: {}".format(peak.shape))
             mean = fnirs.mean_activation(data) # get the mean activation
             peakActDF.loc[len(peakActDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
             meanActDF.loc[len(meanActDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(mean)

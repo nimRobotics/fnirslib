@@ -115,15 +115,19 @@ class Fnirslib:
         :param freq: sampling frequency
         :return: local baseline data
         """
+        # TODO: add support for paired stims
+        # if self.paired:
+        #     raise NotImplementedError('Paired stims not supported')
+        data = data[:,sig_type,:]
         num_obs = int(duration*freq) # number of observations in the baseline
-        loc = np.where(stims[:,self.stimNumber]==1)[0] # get indices of stims
-        starts = loc[::2] # get start indices
+        stim_indices = np.where(stims[:,self.stimNumber]==1)[0] # get indices of stims
         baseline = []
-        for start in starts:
-            baseline.append(np.mean(data[start-num_obs+1:start,sig_type,:], axis=0))
+        for idx in stim_indices:
+            baseline.append(np.mean(data[idx-num_obs+1:idx,:], axis=0)) # mean across observations
         baseline = np.array(baseline)
+        baseline = np.mean(baseline, axis=0) # mean across trials
         print(baseline.shape)
-        return np.array(baseline)
+        return baseline
 
     def _find_islands(self, x):
         """
