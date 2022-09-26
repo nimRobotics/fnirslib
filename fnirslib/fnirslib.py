@@ -116,8 +116,8 @@ class Fnirslib:
         :return: local baseline data
         """
         # TODO: add support for paired stims
-        # if self.paired:
-        #     raise NotImplementedError('Paired stims not supported')
+        if self.paired:
+            raise NotImplementedError('Paired stims not supported')
         data = data[:,sig_type,:]
         num_obs = int(duration*freq) # number of observations in the baseline
         stim_indices = np.where(stims[:,self.stimNumber]==1)[0] # get indices of stims
@@ -250,7 +250,7 @@ class Fnirslib:
         :param peakPadding: number of samples to pad the peak
         :return: peak activations
         """
-        return metrics.Metrics(data, peakPadding).get_peak_activation()
+        return metrics.Metrics(data, peakPadding).get_peak_activation(baseline=baseline)
 
     def mean_activation(self, data):
         """
