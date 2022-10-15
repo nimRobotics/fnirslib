@@ -28,17 +28,16 @@ MIT License
 ## Pipeline
 
 ```mermaid
-  graph TD;
-      A-->B;
-      A-->C;
-      B-->D;
-      C-->D;
-```
-```mermaid
-    graph TD
-        A[Christmas] -->|Get money| B(Go shopping)
-        B --> C{Let me think}
-        C -->|One| D[Laptop]
-        C -->|Two| E[iPhone]
-        C -->|Three| F[fa:fa-car Car]
+  flowchart TB
+    A[raw data]-->B;
+    B --> D[activation];
+    B --> G[connectivity];
+    G --> H[effective];
+    G --> I[effective];
+    D --> E[mean];
+    D --> F[peak];
+
+    subgraph B[aggregrate data]
+        a1 --> a2;
+    end
 ```
