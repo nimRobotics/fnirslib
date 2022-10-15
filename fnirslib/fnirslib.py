@@ -207,6 +207,7 @@ class Fnirslib:
             # store all islands in a list
             idx = np.where(mask!=0)[0]
             data = np.array(np.split(data[idx],np.where(np.diff(idx)!=1)[0]+1))
+            print('raw data ndim: ', data.ndim)
         if aggMethod.lower() not in ['concat', 'mean', 'raw']:
             raise ValueError('aggMethod should be either concat, mean or raw')
         logging.info('Number of observations in ROI: {}'.format(data.shape[0]))

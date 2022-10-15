@@ -73,8 +73,9 @@ for stimNumber, condition in zip(stimulus, conditions):
             # baseline = fnirs.get_global_baseline(data, stims, baseline_stim, sig_type) # get the baseline
             baseline = fnirs.get_local_baseline(data, stims, sig_type, duration=2, freq=freq) # get the baseline
             print("data shape: {}".format(data.shape))
-            data, stims = fnirs.get_ROI(data, stims, aggMethod='mean')
-            plotData(data, filename=file).line_plot()
+            data, stims = fnirs.get_ROI(data, stims, aggMethod='raw')
+            print("data shape: {}".format(data.shape))
+            # plotData(data, filename=file).line_plot()
             # data = data[:,sig_type,:] # 0 for HbO, 1 for HbR, 2 for HbT
             # peak = fnirs.peak_activation(data, baseline, peakPadding=5) # get the peak activation
             # print("peak shape: {}".format(peak.shape))

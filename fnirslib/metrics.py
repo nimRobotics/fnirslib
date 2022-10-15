@@ -29,6 +29,31 @@ class Metrics:
         """
         return np.mean(self.data, axis=0)
 
+    def _peak_activation(self, data, baseline=None):
+        """
+        Get peak activation for each region
+        :param baseline: baseline to be subtracted from the data
+        :return: peak activation for each region
+        """
+        peakActivation = np.zeros(data.shape[1])
+        # iterate over each column of data i.e. each channel
+        for i in range(data.shape[1]):
+            maxIdx = np.argmax(data[:,i])
+            # check if padding overshoots the data at start or end
+            if maxIdx-self.peakPadding < 0:
+                logging.warning('Peak activation padding overshoots data at start')
+                peakActivation[i] = np.mean(data[0:maxIdx+self.peakPadding+1,i])
+            elif maxIdx+self.peakPadding+1 > data.shape[0]:
+                logging.warning('Peak activation padding overshoots data at end')
+                peakActivation[i] = np.mean(data[maxIdx-self.peakPadding:data.shape[0],i])
+            else:
+                # print(data[maxIdx-self.peakPadding:maxIdx+self.peakPadding+1,i])
+                peakActivation[i] = np.mean(data[maxIdx-self.peakPadding:maxIdx+self.peakPadding+1,i])
+            # subtract baseline if baseline is provided
+            if baseline is not None:
+                peakActivation[i] -= baseline[i]
+        return peakActivation
+
     def get_peak_activation(self, baseline=None):
         """
         Get peak activation for each region
@@ -37,25 +62,13 @@ class Metrics:
         :param padding: padding to be considered surrounding the peak
         :return: peak activation for each region
         """
-        # initialize array
-        peakActivation = np.zeros(self.data.shape[1])
-        # iterate over each column of data
-        for i in range(self.data.shape[1]):
-            maxIdx = np.argmax(self.data[:,i])
-            # check if padding overshoots the data at start or end
-            if maxIdx-self.peakPadding < 0:
-                logging.warning('Peak activation padding overshoots data at start')
-                peakActivation[i] = np.mean(self.data[0:maxIdx+self.peakPadding+1,i])
-            elif maxIdx+self.peakPadding+1 > self.data.shape[0]:
-                logging.warning('Peak activation padding overshoots data at end')
-                peakActivation[i] = np.mean(self.data[maxIdx-self.peakPadding:self.data.shape[0],i])
-            else:
-                # print(self.data[maxIdx-self.peakPadding:maxIdx+self.peakPadding+1,i])
-                peakActivation[i] = np.mean(self.data[maxIdx-self.peakPadding:maxIdx+self.peakPadding+1,i])
-            # subtract baseline if baseline is provided
-            if baseline is not None:
-                peakActivation[i] -= baseline[i]
-        return peakActivation
+        if self.data.ndim == 3:
+            return self._peak_activation(self.data, baseline)
+        if self.data.ndim == 1:
+            act_data = np.zeros((1, self.data.shape[0]))
+            for trial in self.data.shape[0]:
+                act_data[trial, :] = self._peak_activation(self.data[trial], baseline)
+
 
     def get_functional_connectivity(self):
         """
