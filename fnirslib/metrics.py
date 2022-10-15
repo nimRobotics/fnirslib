@@ -62,12 +62,12 @@ class Metrics:
         :param padding: padding to be considered surrounding the peak
         :return: peak activation for each region
         """
-        if self.data.ndim == 3:
+        if self.data.ndim == 2:
             return self._peak_activation(self.data, baseline)
         if self.data.ndim == 1:
-            act_data = np.zeros((1, self.data.shape[0]))
+            act_data = []
             for trial in self.data.shape[0]:
-                act_data[trial, :] = self._peak_activation(self.data[trial], baseline)
+                act_data.append(self._peak_activation(self.data[trial], baseline))
 
 
     def get_functional_connectivity(self):
