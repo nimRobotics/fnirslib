@@ -203,6 +203,12 @@ class Fnirslib:
             data = np.array(np.split(data[idx],np.where(np.diff(idx)!=1)[0]+1))
             data = np.mean(data, axis=0) # mean over the trials
             # print('data shape after mean', data.shape)
+        if aggMethod.lower()=='raw':
+            # store all islands in a list
+            idx = np.where(mask!=0)[0]
+            data = np.array(np.split(data[idx],np.where(np.diff(idx)!=1)[0]+1))
+        if aggMethod.lower() not in ['concat', 'mean', 'raw']:
+            raise ValueError('aggMethod should be either concat, mean or raw')
         logging.info('Number of observations in ROI: {}'.format(data.shape[0]))
         return data, stims
 
