@@ -11,7 +11,7 @@ class plotData(object):
     """
     Plots the correlation matrix
     """
-    def __init__(self, data, labels, savedir, colormap='viridis', dpi=None, title=None, filename=None):
+    def __init__(self, data, labels=None, savedir='./', colormap='viridis', dpi=None, title=None, filename=None):
         """
         Plots the correlation matrix
         :param data: correlation matrix
@@ -30,6 +30,21 @@ class plotData(object):
         self.filename = filename
         self.colormap = colormap
         self.dpi = dpi
+
+    def line_plot(self):
+        """
+        Plot brain data line plot
+        each row is a different line
+        :return: None
+        """
+        plt.figure()
+        plt.plot(self.data)   
+        # add row numbers as legend
+        plt.legend(range(self.data.shape[0]))         
+        plt.savefig(self.savedir +'line_', dpi=self.dpi)
+        
+
+
 
     def circularPlot(self):
         """
