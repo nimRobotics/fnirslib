@@ -115,12 +115,12 @@ class Fnirslib:
         :param freq: sampling frequency
         :return: local baseline data
         """
-        # TODO: add support for paired stims
-        if self.paired:
-            raise NotImplementedError('Paired stims not supported')
         data = data[:,sig_type,:]
         num_obs = int(duration*freq) # number of observations in the baseline
         stim_indices = np.where(stims[:,self.stimNumber]==1)[0] # get indices of stims
+        if self.paired:
+            # get start indices
+            stim_indices = stim_indices[::2]
         baseline = []
         for idx in stim_indices:
             baseline.append(np.mean(data[idx-num_obs+1:idx,:], axis=0)) # mean across observations
