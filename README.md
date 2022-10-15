@@ -28,16 +28,36 @@ MIT License
 ## Pipeline
 
 ```mermaid
-  flowchart TB
-    A[raw data]-->B;
-    B --> D[activation];
-    B --> G[connectivity];
+  flowchart
+    A[raw data <br/> n,3,46]-->C[load_nirs];
+    C -->B
+    b2 --> D[activation <br/> 3,46];
+    D-->E[meanAct]
+    b3 --> Y
+    Y -->G[connectivity];
     G --> H[effective];
-    G --> I[effective];
-    D --> E[mean];
-    D --> F[peak];
+    G --> I[functional];
+    E --> Y;
+    E --> E1[meanActPlot]
+    Y --> E2[meanActStats]
+    F[peakAct];
+    D-->F
+    F-->Y
+    Y-->F1[peakActStats]
+    F-->F2[peakActPlot]
 
-    subgraph B[aggregrate data]
-        a1 --> a2;
+    subgraph B[get_ROI n,3,46,10]
+        b1[aggMethods] --> b2[mean <br/> n,3,46]
+        b1 --> b3[concatenate <br/> n,3,46];
+        b1 --> b4[list of trials <br/> n,3,46,10]
     end
+
+    b4 --> X
+    X -->F
+
+    subgraph X[peak activation]
+        x1
+    end
+
+    Y[cluster channels mean <br/> n,3,11]
 ```
