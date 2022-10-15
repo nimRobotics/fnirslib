@@ -25,3 +25,12 @@ See the [examples](examples) directory for usage examples.
 
 MIT License
 
+## Pipeline
+
+```mermaid
+  graph TD;
+      A-->B;
+      A-->C;
+      B-->D;
+      C-->D;
+```
