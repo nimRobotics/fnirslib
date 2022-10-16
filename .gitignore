@@ -6,3 +6,9 @@ fnirslib.egg-info/
 *.pyo
 __pycache__/
 
+# RStudio
+.Rhistory
+.Rproj.user/
+.RData
+
+

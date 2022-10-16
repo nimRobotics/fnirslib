@@ -125,7 +125,8 @@ class Fnirslib:
         for idx in stim_indices:
             baseline.append(np.mean(data[idx-num_obs+1:idx,:], axis=0)) # mean across observations
         baseline = np.array(baseline)
-        baseline = np.mean(baseline, axis=0) # mean across trials
+        # TODO: create case for mean or all trial baselines
+        # baseline = np.mean(baseline, axis=0) # mean across trials
         print(baseline.shape)
         return baseline
 

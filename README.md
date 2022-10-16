@@ -30,7 +30,8 @@ MIT License
 ```mermaid
   flowchart
     A[raw data <br/> n,3,46]-->C[load_nirs];
-    C -->B
+    C --> Cx[obs type]
+    Cx -->B
     b2 --> D[activation <br/> 3,46];
     D-->E[meanAct]
     b3 --> Y

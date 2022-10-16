@@ -64,20 +64,22 @@ for stimNumber, condition in zip(stimulus, conditions):
     avgZscores = np.zeros((len(regions),len(regions)))
     for file in files:
         print("\nProcessing condition '{}' for file {}".format(condition,file))
-        try:
-            # perform activation analysis on mean aggregated data
-            fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
-            logging.info("Activation analysis! averaging trial data")
-            data, stims = fnirs.load_nirs() # load the data
-            fnirs.sanity_check(data, stims) # check the data
-            # baseline = fnirs.get_global_baseline(data, stims, baseline_stim, sig_type) # get the baseline
-            baseline = fnirs.get_local_baseline(data, stims, sig_type, duration=2, freq=freq) # get the baseline
-            print("data shape: {}".format(data.shape))
-            data, stims = fnirs.get_ROI(data, stims, aggMethod='raw')
-            print("data shape: {}".format(data.shape))
-            # plotData(data, filename=file).line_plot()
-            # data = data[:,sig_type,:] # 0 for HbO, 1 for HbR, 2 for HbT
-            # peak = fnirs.peak_activation(data, baseline, peakPadding=5) # get the peak activation
+        # try:
+        # perform activation analysis on mean aggregated data
+        fnirs = Fnirslib(file, regions, stimNumber, condition) # initialize the fnirs object
+        logging.info("Activation analysis! averaging trial data")
+        data, stims = fnirs.load_nirs() # load the data
+        fnirs.sanity_check(data, stims) # check the data
+        # baseline = fnirs.get_global_baseline(data, stims, baseline_stim, sig_type) # get the baseline
+        baseline = fnirs.get_local_baseline(data, stims, sig_type, duration=2, freq=freq) # get the baseline
+        print("Baseline: ", baseline.shape)
+        print("data shape: {}".format(data.shape))
+        data, stims = fnirs.get_ROI(data, stims, aggMethod='raw')
+        print("data shape: {}".format(data.shape))
+        # plotData(data, filename=file).line_plot()
+        # data = data[:,sig_type,:] # 0 for HbO, 1 for HbR, 2 for HbT
+        peak = fnirs.peak_activation(data, baseline, peakPadding=5) # get the peak activation
+        print("Peak: ", peak.shape)
             # print("peak shape: {}".format(peak.shape))
             # mean = fnirs.mean_activation(data) # get the mean activation
             # peakActDF.loc[len(peakActDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(peak)
@@ -107,10 +109,10 @@ for stimNumber, condition in zip(stimulus, conditions):
 #                 corr[np.where(np.abs(zscores) < threshold)] = 0
 #             triuCorr = corr[np.triu_indices(len(corr), 1)] # get the upper triangle of the correlation matrix
 #             funcConDF.loc[len(funcConDF)] = [file.split('/')[-1].split('.')[0], fnirs.sex, fnirs.condition] + list(triuCorr)
-        except Exception as e:
-            print(e)
-            logging.error(e)
-            continue
+        # except Exception as e:
+        #     print(e)
+        #     logging.error(e)
+        #     continue
     
 #     # save average correlation, zscores as .mat and .csv
 #     scipy.io.savemat(output_dir+'/{}_avgCorr.mat'.format(condition), mdict={'avgCorr': avgCorr})

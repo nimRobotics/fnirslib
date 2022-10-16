@@ -66,8 +66,14 @@ class Metrics:
             return self._peak_activation(self.data, baseline)
         if self.data.ndim == 1:
             act_data = []
-            for trial in self.data.shape[0]:
-                act_data.append(self._peak_activation(self.data[trial], baseline))
+            for trial in range(self.data.shape[0]):
+                print('trial',trial)
+                print('data',self.data[trial].shape)
+                print('baseline',baseline[trial].shape)
+                print('data',self.data[trial][:,0,:].shape)
+                act_data.append(self._peak_activation(self.data[trial][:,0,:], baseline[trial]))
+            act_data = np.array(act_data)
+            return np.mean(act_data, axis=0)
 
 
     def get_functional_connectivity(self):

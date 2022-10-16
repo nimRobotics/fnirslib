@@ -1,0 +1,153 @@
+2022-10-15 22:28:35,218 - INFO - Processing file './rawData/012.nirs', with condition 'normal' ...
+2022-10-15 22:28:35,218 - INFO - Number of channels: 46, Number of regions: 11
+2022-10-15 22:28:35,218 - INFO - Activation analysis! averaging trial data
+2022-10-15 22:28:35,343 - INFO - Successfully loaded data from ./rawData/012.nirs
+2022-10-15 22:28:35,343 - INFO - Data shape: (11433, 3, 46), Stimulus data shape: (11433, 4)
+2022-10-15 22:28:35,343 - INFO - Number of stims: 20
+2022-10-15 22:28:35,343 - INFO - Trial starts: [1261 1719 2173 2696 3206 3609 4048 4424 4794 5169]
+2022-10-15 22:28:35,343 - INFO - Trial ends: [1485 1974 2521 2946 3445 3857 4302 4667 5032 5431]
+2022-10-15 22:28:35,344 - INFO - Mean trial duration: 256.1
+2022-10-15 22:28:35,344 - INFO - Number of observations in ROI: 10
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,345 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,346 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,347 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,348 - INFO - Processing file './rawData/032.nirs', with condition 'normal' ...
+2022-10-15 22:28:35,348 - INFO - Number of channels: 46, Number of regions: 11
+2022-10-15 22:28:35,348 - INFO - Activation analysis! averaging trial data
+2022-10-15 22:28:35,529 - INFO - Successfully loaded data from ./rawData/032.nirs
+2022-10-15 22:28:35,529 - INFO - Data shape: (16470, 3, 46), Stimulus data shape: (16470, 4)
+2022-10-15 22:28:35,530 - INFO - Number of stims: 20
+2022-10-15 22:28:35,530 - INFO - Trial starts: [5372 6014 6473 6985 7463 7914 8380 8820 9260 9709]
+2022-10-15 22:28:35,530 - INFO - Trial ends: [ 5687  6261  6733  7240  7719  8192  8636  9076  9514 10006]
+2022-10-15 22:28:35,530 - INFO - Mean trial duration: 267.4
+2022-10-15 22:28:35,531 - INFO - Number of observations in ROI: 10
+2022-10-15 22:28:35,531 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,532 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,533 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,533 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,533 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,533 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,533 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,533 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,533 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,533 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,534 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,534 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,534 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,534 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,534 - INFO - Processing file './rawData/012.nirs', with condition 'attack' ...
+2022-10-15 22:28:35,534 - INFO - Number of channels: 46, Number of regions: 11
+2022-10-15 22:28:35,534 - INFO - Activation analysis! averaging trial data
+2022-10-15 22:28:35,661 - INFO - Successfully loaded data from ./rawData/012.nirs
+2022-10-15 22:28:35,661 - INFO - Data shape: (11433, 3, 46), Stimulus data shape: (11433, 4)
+2022-10-15 22:28:35,661 - INFO - Number of stims: 20
+2022-10-15 22:28:35,662 - INFO - Trial starts: [ 6193  6767  7146  7609  8012  8513  8968  9403  9903 10310]
+2022-10-15 22:28:35,662 - INFO - Trial ends: [ 6487  7096  7476  7866  8268  8828  9222  9695 10179 10596]
+2022-10-15 22:28:35,662 - INFO - Mean trial duration: 288.9
+2022-10-15 22:28:35,662 - INFO - Number of observations in ROI: 10
+2022-10-15 22:28:35,663 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,663 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,664 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,664 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,664 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,664 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,664 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,664 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,664 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,664 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,664 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,664 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,665 - INFO - Processing file './rawData/032.nirs', with condition 'attack' ...
+2022-10-15 22:28:35,665 - INFO - Number of channels: 46, Number of regions: 11
+2022-10-15 22:28:35,665 - INFO - Activation analysis! averaging trial data
+2022-10-15 22:28:35,853 - INFO - Successfully loaded data from ./rawData/032.nirs
+2022-10-15 22:28:35,853 - INFO - Data shape: (16470, 3, 46), Stimulus data shape: (16470, 4)
+2022-10-15 22:28:35,854 - INFO - Number of stims: 20
+2022-10-15 22:28:35,854 - INFO - Trial starts: [11277 11811 12379 12853 13413 13951 14390 14921 15633 16124]
+2022-10-15 22:28:35,854 - INFO - Trial ends: [11528 12083 12659 13228 13680 14220 14694 15294 15902 16373]
+2022-10-15 22:28:35,854 - INFO - Mean trial duration: 290.9
+2022-10-15 22:28:35,855 - INFO - Number of observations in ROI: 10
+2022-10-15 22:28:35,856 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,856 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,856 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,856 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,856 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,856 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,856 - WARNING - Peak activation padding overshoots data at end
+2022-10-15 22:28:35,856 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,857 - WARNING - Peak activation padding overshoots data at start
+2022-10-15 22:28:35,858 - WARNING - Peak activation padding overshoots data at start
